@@ -2,38 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type File {
-  id: ID!
-  filename: String!
-  path: String!
-}
-
-type PostImage {
-  id: ID!
-  file: File!
-  post: Post
-  postId: Int!
-}
-
-type Post {
-  id: ID!
-  title: String!
-  description: String!
-  rating: Int!
-  images: [PostImage]!
-  ownerId: String!
-}
-
-type Query {
-  post(id: ID!): PostResult!
-}
-
-union PostResult = Post | NotFoundError
-
-type NotFoundError implements Error {
-  message: String!
-}
-
 interface Error {
   message: String!
 }
@@ -42,7 +10,32 @@ type Mutation {
   postCreate(data: PostData!): Post!
 }
 
-input PostData {
-  title: String!
+type NotFoundError implements Error {
+  message: String!
+}
+
+type Post {
   description: String!
+  id: ID!
+  images: [PostImage]!
+  ownerId: String!
+  rating: Int!
+  title: String!
+}
+
+input PostData {
+  description: String!
+  imagePaths: [String!]!
+  title: String!
+}
+
+type PostImage {
+  filePath: String!
+  id: ID!
+}
+
+union PostResult = NotFoundError | Post
+
+type Query {
+  post(id: ID!): PostResult!
 }

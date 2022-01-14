@@ -1,9 +1,13 @@
-import { InputType, PickType } from '@nestjs/graphql';
-import { Post } from '../entities';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class PostData extends PickType(
-  Post,
-  ['title', 'description'],
-  InputType,
-) {}
+export class PostData {
+  @Field()
+  title: string;
+
+  @Field()
+  description: string;
+
+  @Field(() => [String])
+  imagePaths: string[];
+}

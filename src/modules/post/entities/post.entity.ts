@@ -19,7 +19,7 @@ export class Post extends BaseEntity {
   rating: number = 0;
 
   @Field(() => [PostImage], { nullable: 'items' })
-  @OneToMany(() => PostImage, (postImage) => postImage.post)
+  @OneToMany(() => PostImage, (postImage) => postImage.post, { eager: true })
   images: PostImage[];
 
   @Field()
