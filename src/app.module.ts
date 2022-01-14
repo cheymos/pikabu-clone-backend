@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './common/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
@@ -15,7 +13,6 @@ import { join } from 'path';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService, JwtStrategy],
+  providers: [JwtStrategy],
 })
 export class AppModule {}
