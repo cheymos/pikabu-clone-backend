@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 
-@ObjectType()
+@ObjectType('File')
 @Entity('local_files')
 export class LocalFile extends BaseEntity {
   @Field()
