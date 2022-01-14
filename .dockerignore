@@ -1,0 +1,27 @@
+# Git
+/.git
+.gitignore
+
+# Dockerfiles
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Npm
+/node_modules
+
+# Vs code
+/.vscode
+
+# Md files
+*.md
+
+# Makefile
+Makefile
+
+# Database data
+/db_data
+
+# Etc
+*.rest
+*.http
