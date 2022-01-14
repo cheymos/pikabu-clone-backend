@@ -16,6 +16,7 @@ import { PostModule } from './modules/post/post.module';
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfig }),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true
     }),
     PostModule,
     LocalFileModule,
