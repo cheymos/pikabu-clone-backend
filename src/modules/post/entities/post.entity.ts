@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany } from 'typeorm';
 import { PostImage } from '.';
 import { BaseEntity } from '../../../common/entities/base.entity';
 
@@ -25,4 +25,8 @@ export class Post extends BaseEntity {
   @Field()
   @Column()
   ownerId: string;
+
+  @Field(() => Date)
+  @CreateDateColumn()
+  createdAt: Date;
 }
