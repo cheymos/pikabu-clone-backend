@@ -8,11 +8,4 @@ export class LocalFile extends BaseEntity {
 
   @Column()
   path: string;
-
-  constructor(filename: string, path: string) {
-    super();
-
-    this.filename = filename;
-    this.path = path;
-  }
 }

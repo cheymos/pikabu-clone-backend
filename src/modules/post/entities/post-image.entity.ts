@@ -17,11 +17,4 @@ export class PostImage extends BaseEntity {
   @HideField()
   @Column()
   postId: number;
-
-  constructor(filePath: string, postId: number) {
-    super();
-
-    this.filePath = filePath;
-    this.postId = postId;
-  }
 }

@@ -16,7 +16,7 @@ export class LocalFileService {
     const prefix = this.configService.get<string>('UPLOADED_FILES_PREFIX');
     const path = `${domain}/${prefix}/${filename}`;
 
-    const fileMetadata = new LocalFile(filename, path);
+    const fileMetadata = this.localFileRepository.create({ filename, path });
 
     return this.localFileRepository.save(fileMetadata);
   }

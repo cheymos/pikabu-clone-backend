@@ -15,8 +15,8 @@ export class Post extends BaseEntity {
   description: string;
 
   @Field(() => Int)
-  @Column()
-  rating: number = 0;
+  @Column({ default: 0 })
+  rating: number;
 
   @Field(() => [PostImage], { nullable: 'items' })
   @OneToMany(() => PostImage, (postImage) => postImage.post, { eager: true })
@@ -25,12 +25,4 @@ export class Post extends BaseEntity {
   @Field()
   @Column()
   ownerId: string;
-
-  constructor(title: string, description: string, ownerId: string) {
-    super();
-
-    this.title = title;
-    this.description = description;
-    this.ownerId = ownerId;
-  }
 }

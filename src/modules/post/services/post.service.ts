@@ -25,12 +25,19 @@ export class PostService {
     { title, description, imagePaths }: PostData,
     userId: string,
   ): Promise<Post> {
-    const newPost = new Post(title, description, userId);
+    const newPost = this.postRepository.create({
+      title,
+      description,
+      ownerId: userId,
+    });
     const post = await this.postRepository.save(newPost);
     post.images = [];
 
     for (let imagePath of imagePaths) {
-      const newPostImage = new PostImage(imagePath, post.id);
+      const newPostImage = this.postImageRepository.create({
+        filePath: imagePath,
+        postId: post.id,
+      });
       const postImage = await this.postImageRepository.save(newPostImage);
 
       post.images.push(postImage);

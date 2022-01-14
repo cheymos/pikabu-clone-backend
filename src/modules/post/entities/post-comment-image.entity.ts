@@ -12,16 +12,9 @@ export class PostCommentImage extends BaseEntity {
 
   @Field(() => Post)
   @ManyToOne(() => Post)
-  post: Post;
+  post?: Post;
 
   @Field(() => Int)
   @Column()
   postId: number;
-
-  constructor(file: string, postId: number) {
-    super();
-
-    this.file = file;
-    this.postId = postId;
-  }
 }

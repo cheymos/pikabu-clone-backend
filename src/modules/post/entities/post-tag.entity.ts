@@ -17,11 +17,4 @@ export class PostTag extends BaseEntity {
   @Field(() => Int)
   @Column()
   postId: number;
-
-  constructor(name: string, postId: number) {
-    super();
-
-    this.name = name;
-    this.postId = postId;
-  }
 }

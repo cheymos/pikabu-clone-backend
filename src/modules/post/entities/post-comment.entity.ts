@@ -25,12 +25,4 @@ export class PostComment extends BaseEntity {
   @Field()
   @Column()
   ownerId: string;
-
-  constructor(text: string, postId: number, ownerId: string) {
-    super();
-
-    this.text = text;
-    this.postId = postId;
-    this.ownerId = ownerId;
-  }
 }
