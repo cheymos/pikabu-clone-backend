@@ -1,0 +1,15 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Post {
+  id: ID!
+  title: String!
+  description: String!
+  rating: Int!
+  ownerId: String!
+}
+
+type Query {
+  post: Post!
+}

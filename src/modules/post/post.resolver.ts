@@ -1,4 +1,8 @@
-import { Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
+import { Post } from './entities';
 
-@Resolver()
-export class PostResolver {}
+@Resolver(() => Post)
+export class PostResolver {
+  @Query(() => Post)
+  post() {}
+}
