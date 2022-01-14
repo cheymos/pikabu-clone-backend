@@ -1,7 +1,7 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, InterfaceType } from '@nestjs/graphql';
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@ObjectType()
+@InterfaceType()
 @Entity()
 export abstract class BaseEntity {
   @Field(() => ID)
