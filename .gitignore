@@ -33,3 +33,13 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Env
+.env
+
+# Database data
+/db_data
+
+# Etc
+*.rest
+*.http
