@@ -2,9 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type LocalFile {
+  id: ID!
+  filename: String!
+  path: String!
+}
+
 type PostImage {
   id: ID!
-  file: String!
+  file: LocalFile!
   post: Post
   postId: Int!
 }
