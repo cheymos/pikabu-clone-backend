@@ -1,4 +1,5 @@
 import { Injectable, mixin, NestInterceptor, Type } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { diskStorage } from 'multer';
@@ -11,8 +12,9 @@ export const LocalFilesInterceptor = (
   class MixinInterceptor implements NestInterceptor {
     private readonly fileInterceptor: NestInterceptor;
 
-    constructor() {
-      const destination = join(__dirname, '..', '..', 'public', 'uploaded');
+    constructor(private readonly configService: ConfigService) {
+      const prefix = this.configService.get('UPLOADED_FILES_PREFIX') as string;
+      const destination = join(__dirname, '..', '..', '..', 'public', prefix);
 
       const multerOptions: MulterOptions = {
         storage: diskStorage({

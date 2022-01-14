@@ -18,8 +18,8 @@ export class LocalFileController {
   @UseGuards(AuthGuard)
   @UseInterceptors(LocalFilesInterceptor('file'))
   uploadFile(
-    @UploadedFile() { filename, path }: Express.Multer.File,
+    @UploadedFile() { filename }: Express.Multer.File,
   ): Promise<LocalFile> {
-    return this.localFileService.saveData(filename, path);
+    return this.localFileService.saveData(filename);
   }
 }
