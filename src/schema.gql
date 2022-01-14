@@ -11,5 +11,24 @@ type Post {
 }
 
 type Query {
-  post: Post!
+  post(id: ID!): PostResult!
+}
+
+union PostResult = Post | NotFoundError
+
+type NotFoundError implements Error {
+  message: String!
+}
+
+interface Error {
+  message: String!
+}
+
+type Mutation {
+  postCreate(data: PostData!): Post!
+}
+
+input PostData {
+  title: String!
+  description: String!
 }
