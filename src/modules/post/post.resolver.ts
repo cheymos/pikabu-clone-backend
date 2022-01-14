@@ -10,7 +10,7 @@ import {
 import { IdArg } from '../../common/decorators/id-arg.decorator';
 import { UserId } from '../../common/decorators/user-id.decorator';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
-import { AuthGuard } from '../../common/guards/auth.guard';
+import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
 import { Post, PostImage } from './entities';
 import { PostData } from './inputs/post-data.input';
@@ -29,7 +29,7 @@ export class PostResolver {
     return this.postService.getById(id);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Post)
   postCreate(
     @Args('data') data: PostData,
