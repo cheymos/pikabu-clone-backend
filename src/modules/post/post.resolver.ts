@@ -1,28 +1,17 @@
 import { UseGuards } from '@nestjs/common';
-import {
-  Args,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver
-} from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IdArg } from '../../common/decorators/id-arg.decorator';
 import { UserId } from '../../common/decorators/user-id.decorator';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
-import { Post, PostImage } from './entities';
+import { Post } from './entities';
 import { PostData } from './inputs/post-data.input';
-import { PostImageService } from './services/post-image.service';
 import { PostService } from './services/post.service';
 
 @Resolver(() => Post)
 export class PostResolver {
-  constructor(
-    private readonly postService: PostService,
-    private readonly postImageService: PostImageService,
-  ) {}
+  constructor(private readonly postService: PostService) {}
 
   @Query(() => PostResult)
   post(@IdArg() id: number): Promise<Post | NotFoundError> {
@@ -36,11 +25,6 @@ export class PostResolver {
     @UserId() userId: string,
   ): Promise<Post> {
     return this.postService.create(data, userId);
-  }
-
-  @ResolveField(() => [PostImage])
-  async images(@Parent() { id }: Post): Promise<PostImage[]> {
-    return this.postImageService.getByPostId(id);
   }
 }
 
