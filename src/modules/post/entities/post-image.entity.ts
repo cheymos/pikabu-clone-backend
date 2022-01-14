@@ -11,7 +11,7 @@ export class PostImage extends BaseEntity {
   file: string;
 
   @Field(() => Post)
-  @ManyToOne(() => Post)
+  @ManyToOne(() => Post, post => post.images)
   post?: Post;
 
   @Field(() => Int)

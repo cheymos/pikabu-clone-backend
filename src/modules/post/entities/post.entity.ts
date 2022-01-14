@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
+import { PostImage } from '.';
 import { BaseEntity } from '../../../common/entities/base.entity';
 
 @ObjectType()
@@ -16,6 +17,10 @@ export class Post extends BaseEntity {
   @Field(() => Int)
   @Column()
   rating: number = 0;
+
+  @Field(() => [PostImage], { nullable: 'items' })
+  @OneToMany(() => PostImage, (postImage) => postImage.post)
+  images: PostImage[];
 
   @Field()
   @Column()

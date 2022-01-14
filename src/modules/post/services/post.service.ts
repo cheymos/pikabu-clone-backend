@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { NotFoundError } from '../../common/graphql/errors/not-found.error';
-import { Post } from './entities';
-import { PostData } from './inputs/post-data.input';
+import { NotFoundError } from '../../../common/graphql/errors/not-found.error';
+import { Post } from '../entities';
+import { PostData } from '../inputs/post-data.input';
 
 @Injectable()
 export class PostService {

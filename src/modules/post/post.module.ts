@@ -8,7 +8,8 @@ import {
   PostTag
 } from './entities';
 import { PostResolver } from './post.resolver';
-import { PostService } from './post.service';
+import { PostImageService } from './services/post-image.service';
+import { PostService } from './services/post.service';
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { PostService } from './post.service';
       PostCommentImage,
     ]),
   ],
-  providers: [PostResolver, PostService],
+  providers: [PostResolver, PostService, PostImageService],
 })
 export class PostModule {}

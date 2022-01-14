@@ -2,11 +2,19 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type PostImage {
+  id: ID!
+  file: String!
+  post: Post
+  postId: Int!
+}
+
 type Post {
   id: ID!
   title: String!
   description: String!
   rating: Int!
+  images: [PostImage]!
   ownerId: String!
 }
 
