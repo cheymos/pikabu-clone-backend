@@ -31,7 +31,7 @@ type Post {
 
 input PostData {
   description: String!
-  imagePaths: [String!]!
+  imagePaths: [String!]
   title: String!
 }
 

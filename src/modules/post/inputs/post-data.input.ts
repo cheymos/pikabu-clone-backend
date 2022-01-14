@@ -8,6 +8,6 @@ export class PostData {
   @Field()
   description: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   imagePaths: string[];
 }
