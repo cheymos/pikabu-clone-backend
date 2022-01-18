@@ -7,6 +7,7 @@ import {
   PostImage,
   PostTag
 } from './entities';
+import { PostLoaders } from './post.loaders';
 import { PostResolver } from './post.resolver';
 import { PostImageService } from './services/post-image.service';
 import { PostTagService } from './services/post-tag.service';
@@ -22,6 +23,6 @@ import { PostService } from './services/post.service';
       PostCommentImage,
     ]),
   ],
-  providers: [PostResolver, PostService, PostImageService, PostTagService],
+  providers: [PostResolver, PostService, PostImageService, PostTagService, PostLoaders],
 })
 export class PostModule {}
