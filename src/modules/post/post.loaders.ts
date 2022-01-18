@@ -1,14 +1,15 @@
 import { Injectable, Scope } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
-import { PostImage, PostTag } from './entities';
-import { PostImageService } from './services/post-image.service';
-import { PostTagService } from './services/post-tag.service';
+import { PostImage } from '../image/entities/post-image.entity';
+import { ImageService } from '../image/image.service';
+import { PostTag } from '../tag/entities/post-tag.entity';
+import { TagService } from '../tag/tag.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PostLoaders {
   constructor(
-    private readonly postImageService: PostImageService,
-    private readonly postTagService: PostTagService,
+    private readonly postImageService: ImageService,
+    private readonly postTagService: TagService,
   ) {}
 
   readonly batchImages = new DataLoader(async (postIds: number[]) => {

@@ -12,17 +12,19 @@ import { UserId } from '../../common/decorators/user-id.decorator';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
-import { Post, PostImage, PostTag } from './entities';
+import { PostImage } from '../image/entities/post-image.entity';
+import { PostTag } from '../tag/entities/post-tag.entity';
+import { TagService } from '../tag/tag.service';
+import { Post } from './entities/post.entity';
 import { CreatePostData } from './inputs/create-post-data.input';
 import { PostLoaders } from './post.loaders';
-import { PostTagService } from './services/post-tag.service';
-import { PostService } from './services/post.service';
+import { PostService } from './post.service';
 
 @Resolver(() => Post)
 export class PostResolver {
   constructor(
     private readonly postService: PostService,
-    private readonly postTagService: PostTagService,
+    private readonly postTagService: TagService,
     private readonly postLoaders: PostLoaders,
   ) {}
 

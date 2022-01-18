@@ -6,8 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { JwtStrategy } from './common/jwt.strategy';
 import { TypeOrmConfig } from './configs/typeorm.config';
+import { ImageModule } from './modules/image/image.module';
 import { LocalFileModule } from './modules/local-file/local-file.module';
 import { PostModule } from './modules/post/post.module';
+import { TagModule } from './modules/tag/tag.module';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -20,6 +23,9 @@ import { PostModule } from './modules/post/post.module';
     }),
     PostModule,
     LocalFileModule,
+    ImageModule,
+    TagModule,
+    CommentModule,
   ],
   providers: [JwtStrategy],
 })

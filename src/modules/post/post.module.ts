@@ -1,28 +1,20 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-  Post,
-  PostComment,
-  PostCommentImage,
-  PostImage,
-  PostTag
-} from './entities';
+import { CommentModule } from '../comment/comment.module';
+import { ImageModule } from '../image/image.module';
+import { TagModule } from '../tag/tag.module';
+import { Post } from './entities/post.entity';
 import { PostLoaders } from './post.loaders';
 import { PostResolver } from './post.resolver';
-import { PostImageService } from './services/post-image.service';
-import { PostTagService } from './services/post-tag.service';
-import { PostService } from './services/post.service';
+import { PostService } from './post.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Post,
-      PostTag,
-      PostImage,
-      PostComment,
-      PostCommentImage,
-    ]),
+    TypeOrmModule.forFeature([Post]),
+    ImageModule,
+    TagModule,
+    CommentModule,
   ],
-  providers: [PostResolver, PostService, PostImageService, PostTagService, PostLoaders],
+  providers: [PostResolver, PostService, PostLoaders],
 })
 export class PostModule {}

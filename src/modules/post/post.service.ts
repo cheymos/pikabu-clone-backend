@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { NotFoundError } from '../../../common/graphql/errors/not-found.error';
-import { Post } from '../entities';
-import { CreatePostData } from '../inputs/create-post-data.input';
-import { PostImageService } from './post-image.service';
-import { PostTagService } from './post-tag.service';
+import { NotFoundError } from '../../common/graphql/errors/not-found.error';
+import { ImageService } from '../image/image.service';
+import { TagService } from '../tag/tag.service';
+import { Post } from './entities/post.entity';
+import { CreatePostData } from './inputs/create-post-data.input';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post) private readonly postRepository: Repository<Post>,
-    private readonly postImageService: PostImageService,
-    private readonly postTagService: PostTagService,
+    private readonly postImageService: ImageService,
+    private readonly postTagService: TagService,
   ) {}
 
   async getById(id: number): Promise<Post | NotFoundError> {
@@ -38,7 +38,7 @@ export class PostService {
       post.images = await this.postImageService.addToPost(post.id, imagePaths);
 
     if (Array.isArray(tags) && tags.length)
-      post.tags = await this.postTagService.addTagsToPost(post.id, tags);
+      post.tags = await this.postTagService.addToPost(post.id, tags);
 
     return post;
   }

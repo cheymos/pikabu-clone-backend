@@ -1,7 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, OneToMany } from 'typeorm';
-import { PostImage, PostTag } from '.';
 import { BaseEntity } from '../../../common/entities/base.entity';
+import { PostImage } from '../../image/entities/post-image.entity';
+import { PostTag } from '../../tag/entities/post-tag.entity';
 
 @ObjectType()
 @Entity('posts')

@@ -1,17 +1,17 @@
 import { Field, HideField, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
-import { Post } from './post.entity';
+import { Post } from '../../post/entities/post.entity';
 
 @ObjectType()
-@Entity('post_tags')
-export class PostTag extends BaseEntity {
+@Entity()
+export class PostImage extends BaseEntity {
   @Field()
   @Column()
-  name: string;
+  filePath: string;
 
   @HideField()
-  @ManyToOne(() => Post)
+  @ManyToOne(() => Post, { onDelete: 'CASCADE' })
   post?: Post;
 
   @HideField()

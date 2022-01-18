@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PostImage } from '../entities';
+import { PostImage } from './entities/post-image.entity';
 
 @Injectable()
-export class PostImageService {
+export class ImageService {
   constructor(
     @InjectRepository(PostImage)
     private readonly postImageRepository: Repository<PostImage>,

@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PostTag } from '../entities';
+import { PostTag } from './entities/post-tag.entity';
 
 @Injectable()
-export class PostTagService {
+export class TagService {
   constructor(
     @InjectRepository(PostTag)
     private readonly postTagRepository: Repository<PostTag>,
   ) {}
 
-  async addTagsToPost(postId: number, tags: string[]) {
+  async addToPost(postId: number, tags: string[]) {
     const postTags = [];
 
     for (let tag of tags) {
@@ -23,7 +23,7 @@ export class PostTagService {
     return postTags;
   }
 
-  async getTagsByPostId(postId: number): Promise<PostTag[]> {
+  async getByPostId(postId: number): Promise<PostTag[]> {
     return this.postTagRepository.find({ postId });
   }
 
