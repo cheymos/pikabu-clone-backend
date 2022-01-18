@@ -51,4 +51,5 @@ type PostTag {
 
 type Query {
   post(id: ID!): PostResult!
+  posts: [Post!]!
 }

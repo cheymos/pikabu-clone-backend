@@ -29,4 +29,11 @@ export class PostImageService {
 
     return postImages;
   }
+
+  async getByPostIds(ids: number[]): Promise<PostImage[]> {
+    return this.postImageRepository
+      .createQueryBuilder('postImage')
+      .where('postImage.postId IN (:...ids)', { ids })
+      .getMany();
+  }
 }

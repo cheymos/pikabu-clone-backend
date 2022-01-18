@@ -26,4 +26,11 @@ export class PostTagService {
   async getTagsByPostId(postId: number): Promise<PostTag[]> {
     return this.postTagRepository.find({ postId });
   }
+
+  async getByPostIds(ids: number[]): Promise<PostTag[]> {
+    return this.postTagRepository
+      .createQueryBuilder('postTag')
+      .where('postTag.postId IN (:...ids)', { ids })
+      .getMany();
+  }
 }

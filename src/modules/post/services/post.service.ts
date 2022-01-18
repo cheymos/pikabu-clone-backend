@@ -42,4 +42,8 @@ export class PostService {
 
     return post;
   }
+
+  async getAll(): Promise<Post[]> {
+    return this.postRepository.find();
+  }
 }

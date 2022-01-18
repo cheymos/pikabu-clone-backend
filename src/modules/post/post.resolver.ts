@@ -14,7 +14,7 @@ import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
 import { Post, PostImage, PostTag } from './entities';
 import { CreatePostData } from './inputs/create-post-data.input';
-import { PostImageService } from './services/post-image.service';
+import { PostLoaders } from './post.loaders';
 import { PostTagService } from './services/post-tag.service';
 import { PostService } from './services/post.service';
 
@@ -22,8 +22,8 @@ import { PostService } from './services/post.service';
 export class PostResolver {
   constructor(
     private readonly postService: PostService,
-    private readonly postImageService: PostImageService,
     private readonly postTagService: PostTagService,
+    private readonly postLoaders: PostLoaders,
   ) {}
 
   @Query(() => PostResult)
@@ -31,18 +31,23 @@ export class PostResolver {
     return this.postService.getById(id);
   }
 
+  @Query(() => [Post])
+  posts() {
+    return this.postService.getAll();
+  }
+
   @ResolveField(() => [PostImage])
   images(@Parent() { id, images }: Post) {
     if (images) return images;
 
-    return this.postImageService.getByPostId(id);
+    return this.postLoaders.batchImages.load(id);
   }
 
   @ResolveField(() => [PostTag])
   tags(@Parent() { id, tags }: Post) {
     if (tags) return tags;
 
-    return this.postTagService.getTagsByPostId(id);
+    return this.postLoaders.batchTags.load(id);
   }
 
   @UseGuards(GqlAuthGuard)
