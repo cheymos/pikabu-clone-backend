@@ -5,6 +5,7 @@ import { ImageService } from '../image/image.service';
 import { PostTag } from '../tag/entities/post-tag.entity';
 import { TagService } from '../tag/tag.service';
 
+// MENTOR: А можно ли вообще так делать?)
 @Injectable({ scope: Scope.REQUEST })
 export class PostLoaders {
   constructor(
