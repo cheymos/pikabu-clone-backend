@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NotFoundError } from '../../../common/graphql/errors/not-found.error';
 import { Post } from '../entities';
-import { PostData } from '../inputs/post-data.input';
+import { CreatePostData } from '../inputs/create-post-data.input';
 import { PostImageService } from './post-image.service';
 import { PostTagService } from './post-tag.service';
 
@@ -24,7 +24,7 @@ export class PostService {
   }
 
   async create(
-    { title, description, imagePaths, tags }: PostData,
+    { title, description, imagePaths, tags }: CreatePostData,
     userId: string,
   ): Promise<Post> {
     const newPost = this.postRepository.create({

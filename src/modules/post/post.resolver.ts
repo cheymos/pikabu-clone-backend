@@ -13,7 +13,7 @@ import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
 import { Post, PostImage, PostTag } from './entities';
-import { PostData } from './inputs/post-data.input';
+import { CreatePostData } from './inputs/create-post-data.input';
 import { PostImageService } from './services/post-image.service';
 import { PostTagService } from './services/post-tag.service';
 import { PostService } from './services/post.service';
@@ -48,7 +48,7 @@ export class PostResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Post)
   postCreate(
-    @Args('data') data: PostData,
+    @Args('data') data: CreatePostData,
     @UserId() userId: string,
   ): Promise<Post> {
     return this.postService.create(data, userId);
