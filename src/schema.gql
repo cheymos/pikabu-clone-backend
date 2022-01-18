@@ -26,12 +26,14 @@ type Post {
   images: [PostImage]!
   ownerId: String!
   rating: Int!
+  tags: [PostTag]!
   title: String!
 }
 
 input PostData {
   description: String!
   imagePaths: [String!]
+  tags: [String!]
   title: String!
 }
 
@@ -41,6 +43,11 @@ type PostImage {
 }
 
 union PostResult = NotFoundError | Post
+
+type PostTag {
+  id: ID!
+  name: String!
+}
 
 type Query {
   post(id: ID!): PostResult!

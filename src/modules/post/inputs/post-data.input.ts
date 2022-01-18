@@ -10,4 +10,7 @@ export class PostData {
 
   @Field(() => [String], { nullable: true })
   imagePaths: string[];
+
+  @Field(() => [String], { nullable: true })
+  tags: string[];
 }

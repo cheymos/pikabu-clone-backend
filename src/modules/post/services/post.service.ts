@@ -5,12 +5,14 @@ import { NotFoundError } from '../../../common/graphql/errors/not-found.error';
 import { Post } from '../entities';
 import { PostData } from '../inputs/post-data.input';
 import { PostImageService } from './post-image.service';
+import { PostTagService } from './post-tag.service';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post) private readonly postRepository: Repository<Post>,
     private readonly postImageService: PostImageService,
+    private readonly postTagService: PostTagService,
   ) {}
 
   async getById(id: number): Promise<Post | NotFoundError> {
@@ -22,7 +24,7 @@ export class PostService {
   }
 
   async create(
-    { title, description, imagePaths }: PostData,
+    { title, description, imagePaths, tags }: PostData,
     userId: string,
   ): Promise<Post> {
     const newPost = this.postRepository.create({
@@ -32,7 +34,11 @@ export class PostService {
     });
     const post = await this.postRepository.save(newPost);
 
-    post.images = await this.postImageService.addToPost(post.id, imagePaths);
+    if (Array.isArray(imagePaths) && imagePaths.length)
+      post.images = await this.postImageService.addToPost(post.id, imagePaths);
+
+    if (Array.isArray(tags) && tags.length)
+      post.tags = await this.postTagService.addTagsToPost(post.id, tags);
 
     return post;
   }

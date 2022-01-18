@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { Post } from './post.entity';
@@ -10,11 +10,11 @@ export class PostTag extends BaseEntity {
   @Column()
   name: string;
 
-  @Field(() => Post)
+  @HideField()
   @ManyToOne(() => Post)
   post?: Post;
 
-  @Field(() => Int)
+  @HideField()
   @Column()
   postId: number;
 }

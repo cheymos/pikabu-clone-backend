@@ -9,6 +9,7 @@ import {
 } from './entities';
 import { PostResolver } from './post.resolver';
 import { PostImageService } from './services/post-image.service';
+import { PostTagService } from './services/post-tag.service';
 import { PostService } from './services/post.service';
 
 @Module({
@@ -21,6 +22,6 @@ import { PostService } from './services/post.service';
       PostCommentImage,
     ]),
   ],
-  providers: [PostResolver, PostService, PostImageService],
+  providers: [PostResolver, PostService, PostImageService, PostTagService],
 })
 export class PostModule {}
