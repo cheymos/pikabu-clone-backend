@@ -26,6 +26,15 @@ type NotFoundError implements Error {
   message: String!
 }
 
+type PaginationInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  page: Int!
+  perPage: Int!
+  totalItems: Int!
+  totalPages: Int!
+}
+
 type Post {
   createdAt: DateTime!
   description: String!
@@ -42,6 +51,11 @@ type PostImage {
   id: ID!
 }
 
+type PostPagination {
+  items: [Post!]!
+  pageInfo: PaginationInfo!
+}
+
 union PostResult = NotFoundError | Post
 
 type PostTag {
@@ -51,5 +65,5 @@ type PostTag {
 
 type Query {
   post(id: ID!): PostResult!
-  posts: [Post!]!
+  posts(page: Int = 1, perPage: Int = 20): PostPagination!
 }

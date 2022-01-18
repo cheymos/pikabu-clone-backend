@@ -1,13 +1,5 @@
+import { Type } from '@nestjs/common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-
-@ObjectType({ isAbstract: true })
-export class PaginationResult<T> {
-  @Field()
-  items: T[];
-
-  @Field()
-  pageInfo: PaginationInfo;
-}
 
 @ObjectType()
 export class PaginationInfo {
@@ -28,4 +20,26 @@ export class PaginationInfo {
 
   @Field()
   hasPreviousPage: boolean;
+
+  constructor(fields: PaginationInfo) {
+    Object.assign(this, fields);
+  }
+}
+export function PaginationResult<T>(classRef: Type<T>): Type<IPaginatedType<T>> {
+
+  @ObjectType({ isAbstract: true })
+  class PaginationResult<T> {
+    @Field(() => [classRef])
+    items: T[];
+
+    @Field()
+    pageInfo: PaginationInfo;
+  }
+
+  return PaginationResult;
+};
+
+export interface IPaginatedType<T> {
+  items: T[]
+  pageInfo: PaginationInfo;
 }

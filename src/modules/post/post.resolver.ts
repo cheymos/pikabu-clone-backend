@@ -9,22 +9,22 @@ import {
 } from '@nestjs/graphql';
 import { IdArg } from '../../common/decorators/id-arg.decorator';
 import { UserId } from '../../common/decorators/user-id.decorator';
+import { PaginationArgs } from '../../common/graphql/args/pagination.args';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
 import { PostImage } from '../image/entities/post-image.entity';
 import { PostTag } from '../tag/entities/post-tag.entity';
-import { TagService } from '../tag/tag.service';
 import { Post } from './entities/post.entity';
 import { CreatePostData } from './inputs/create-post-data.input';
 import { PostLoaders } from './post.loaders';
 import { PostService } from './post.service';
+import { PostPagination } from './types/post-pagination.type';
 
 @Resolver(() => Post)
 export class PostResolver {
   constructor(
     private readonly postService: PostService,
-    private readonly postTagService: TagService,
     private readonly postLoaders: PostLoaders,
   ) {}
 
@@ -33,9 +33,9 @@ export class PostResolver {
     return this.postService.getById(id);
   }
 
-  @Query(() => [Post])
-  posts() {
-    return this.postService.getAll();
+  @Query(() => PostPagination)
+  posts(@Args() paginationArgs: PaginationArgs): Promise<PostPagination> {
+    return this.postService.getAll(paginationArgs);
   }
 
   @ResolveField(() => [PostImage])

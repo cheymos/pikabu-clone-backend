@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserInputError } from 'apollo-server-express';
 import { Repository } from 'typeorm';
+import { PaginationArgs } from '../../common/graphql/args/pagination.args';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
+import { PaginationInfo } from '../../common/graphql/types/pagination-result.type';
 import { ImageService } from '../image/image.service';
 import { TagService } from '../tag/tag.service';
 import { Post } from './entities/post.entity';
 import { CreatePostData } from './inputs/create-post-data.input';
+import { PostPagination } from './types/post-pagination.type';
 
 @Injectable()
 export class PostService {
@@ -43,7 +47,32 @@ export class PostService {
     return post;
   }
 
-  async getAll(): Promise<Post[]> {
-    return this.postRepository.find();
+  // MENTOR: Логику с пагинацией лучше вынести из сервиса?
+  async getAll({ page, perPage }: PaginationArgs): Promise<PostPagination> {
+    if (page < 1 || perPage < 1)
+      throw new UserInputError('Page and perPage must not be less than 1');
+
+    const skip = page * perPage - perPage;
+
+    const [items, totalItems] = await this.postRepository.findAndCount({
+      skip,
+      take: perPage,
+    });
+
+    const totalPages = Math.ceil(totalItems / perPage);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+    const currentPerPage = items.length;
+
+    const pageInfo = new PaginationInfo({
+      page,
+      perPage: currentPerPage,
+      totalItems,
+      totalPages,
+      hasNextPage,
+      hasPreviousPage,
+    });
+
+    return { items, pageInfo };
   }
 }
