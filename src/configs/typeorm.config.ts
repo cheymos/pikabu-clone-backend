@@ -14,6 +14,7 @@ export class TypeOrmConfig implements TypeOrmOptionsFactory {
       password: process.env.TYPEORM_PASSWORD,
       entities: [join(__dirname, '..', 'modules', '**', '*.entity{.ts,.js}')],
       synchronize: true,
+      logging: process.env.NODE_ENV === 'production' ? undefined : ['query'],
       // migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
       // cli: {
       //   migrationsDir: 'src/database/migrations',
