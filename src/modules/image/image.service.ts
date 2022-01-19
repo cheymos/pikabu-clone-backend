@@ -15,17 +15,18 @@ export class ImageService {
   }
 
   async addToPost(postId: number, imagePaths: string[]): Promise<PostImage[]> {
-    const postImages = [];
+    const newPostImages = [];
 
     for (let imagePath of imagePaths) {
       const newPostImage = this.postImageRepository.create({
         filePath: imagePath,
         postId,
       });
-      const postImage = await this.postImageRepository.save(newPostImage);
 
-      postImages.push(postImage);
+      newPostImages.push(newPostImage);
     }
+
+    const postImages = await this.postImageRepository.save(newPostImages);
 
     return postImages;
   }

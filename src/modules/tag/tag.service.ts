@@ -11,14 +11,14 @@ export class TagService {
   ) {}
 
   async addToPost(postId: number, tags: string[]) {
-    const postTags = [];
+    const newPostTags = [];
 
     for (let tag of tags) {
       const newPostTag = this.postTagRepository.create({ name: tag, postId });
-      const postTag = await this.postTagRepository.save(newPostTag);
-
-      postTags.push(postTag);
+      newPostTags.push(newPostTag);
     }
+
+    const postTags = await this.postTagRepository.save(newPostTags);
 
     return postTags;
   }
