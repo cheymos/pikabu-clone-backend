@@ -8,6 +8,7 @@ import { PaginationInfo } from '../../common/graphql/types/pagination-result.typ
 import { ImageService } from '../image/image.service';
 import { TagService } from '../tag/tag.service';
 import { Post } from './entities/post.entity';
+import { PostSort } from './enums/post-sort.enum';
 import { CreatePostData } from './inputs/create-post-data.input';
 import { PostPagination } from './types/post-pagination.type';
 
@@ -48,7 +49,10 @@ export class PostService {
   }
 
   // MENTOR: Логику с пагинацией лучше вынести из сервиса?
-  async getAll({ page, perPage }: PaginationArgs): Promise<PostPagination> {
+  async getAll(
+    { page, perPage }: PaginationArgs,
+    sortOption: PostSort[],
+  ): Promise<PostPagination> {
     if (page < 1 || perPage < 1)
       throw new UserInputError('Page and perPage must not be less than 1');
 
@@ -57,6 +61,7 @@ export class PostService {
     const [items, totalItems] = await this.postRepository.findAndCount({
       skip,
       take: perPage,
+      order: this.getFieldOrder(sortOption),
     });
 
     const totalPages = Math.ceil(totalItems / perPage);
@@ -75,4 +80,31 @@ export class PostService {
 
     return { items, pageInfo };
   }
+
+  private getFieldOrder(sortOptions: PostSort[]) {
+    if (!Array.isArray(sortOptions) || !sortOptions.length) return undefined;
+
+    const order: PostOrderType = {};
+
+    for (const option of sortOptions) {
+      switch (option) {
+        case PostSort.DATE_ASC:
+          order.createdAt = 'ASC';
+          break;
+        case PostSort.DATE_DESC:
+          order.createdAt = 'DESC';
+          break;
+        case PostSort.LIKE_ASC:
+          order.likes = 'ASC';
+          break;
+        case PostSort.LIKE_DESC:
+          order.likes = 'DESC';
+          break;
+      }
+    }
+
+    return order;
+  }
 }
+
+export type PostOrderType = { [key in keyof Post]?: 'ASC' | 'DESC' | 1 | -1 };

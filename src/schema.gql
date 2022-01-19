@@ -69,6 +69,13 @@ type PostPagination {
 
 union PostResult = NotFoundError | Post
 
+enum PostSort {
+  DATE_ASC
+  DATE_DESC
+  LIKE_ASC
+  LIKE_DESC
+}
+
 type PostTag {
   id: ID!
   name: String!
@@ -81,7 +88,7 @@ type PostVote {
 
 type Query {
   post(id: ID!): PostResult!
-  posts(page: Int = 1, perPage: Int = 20): PostPagination!
+  posts(page: Int = 1, perPage: Int = 20, postSort: [PostSort!]): PostPagination!
 }
 
 enum VoteValue {

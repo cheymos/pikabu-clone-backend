@@ -20,6 +20,7 @@ import { PostVote } from '../vote/entities/post-vote.entity';
 import { VoteValue } from '../vote/enums/vote-value.enum';
 import { VoteService } from '../vote/vote.service';
 import { Post } from './entities/post.entity';
+import { PostSort } from './enums/post-sort.enum';
 import { CreatePostData } from './inputs/create-post-data.input';
 import { PostLoaders } from './post.loaders';
 import { PostService } from './post.service';
@@ -39,8 +40,12 @@ export class PostResolver {
   }
 
   @Query(() => PostPagination)
-  posts(@Args() paginationArgs: PaginationArgs): Promise<PostPagination> {
-    return this.postService.getAll(paginationArgs);
+  posts(
+    @Args() paginationArgs: PaginationArgs,
+    @Args('postSort', { type: () => [PostSort], nullable: true })
+    sortOption: PostSort[],
+  ): Promise<PostPagination> {
+    return this.postService.getAll(paginationArgs, sortOption);
   }
 
   @ResolveField(() => [PostImage])
