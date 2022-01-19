@@ -2,6 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AlreadyVotedError implements Error {
+  message: String!
+}
+
 input CreatePostData {
   description: String!
   imagePaths: [String!]
@@ -18,8 +22,15 @@ interface Error {
   message: String!
 }
 
+enum LikeValue {
+  NO
+  YES
+}
+
 type Mutation {
   postCreate(data: CreatePostData!): Post!
+  postDisLike(id: ID!): PostLikeResult!
+  postLike(id: ID!): PostLikeResult!
 }
 
 type NotFoundError implements Error {
@@ -40,6 +51,7 @@ type Post {
   description: String!
   id: ID!
   images: [PostImage]!
+  likes: [PostLike]!
   ownerId: String!
   rating: Int!
   tags: [PostTag]!
@@ -50,6 +62,13 @@ type PostImage {
   filePath: String!
   id: ID!
 }
+
+type PostLike {
+  ownerId: String!
+  value: LikeValue!
+}
+
+union PostLikeResult = AlreadyVotedError | NotFoundError | Post
 
 type PostPagination {
   items: [Post!]!

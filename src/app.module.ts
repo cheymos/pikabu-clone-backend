@@ -11,6 +11,7 @@ import { LocalFileModule } from './modules/local-file/local-file.module';
 import { PostModule } from './modules/post/post.module';
 import { TagModule } from './modules/tag/tag.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { LikeModule } from './modules/like/like.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { CommentModule } from './modules/comment/comment.module';
     ImageModule,
     TagModule,
     CommentModule,
+    LikeModule,
   ],
   providers: [JwtStrategy],
 })
