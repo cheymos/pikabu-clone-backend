@@ -6,6 +6,12 @@ type AlreadyVotedError implements Error {
   message: String!
 }
 
+input CreatePostCommentData {
+  imagePaths: [String!]
+  postId: Int!
+  text: String!
+}
+
 input CreatePostData {
   description: String!
   imagePaths: [String!]
@@ -23,6 +29,7 @@ interface Error {
 }
 
 type Mutation {
+  postAddComment(data: CreatePostCommentData!): PostResult!
   postCreate(data: CreatePostData!): Post!
   postDisLike(id: ID!): PostLikeResult!
   postLike(id: ID!): PostLikeResult!
@@ -42,6 +49,7 @@ type PaginationInfo {
 }
 
 type Post {
+  comments: [PostComment]!
   createdAt: DateTime!
   description: String!
   dislikes: Int!
@@ -53,6 +61,18 @@ type Post {
   tags: [PostTag]!
   title: String!
   votes: [PostVote]!
+}
+
+type PostComment {
+  id: ID!
+  images: [PostCommentImage]!
+  ownerId: String!
+  text: String!
+}
+
+type PostCommentImage {
+  filePath: String!
+  id: ID!
 }
 
 type PostImage {

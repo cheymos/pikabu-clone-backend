@@ -1,20 +1,20 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
-import { Post } from '../../post/entities/post.entity';
+import { PostComment } from '../../comment/entities/post-comment.entity';
 
 @ObjectType()
 @Entity('post_comment_images')
 export class PostCommentImage extends BaseEntity {
   @Field()
   @Column()
-  file: string;
+  filePath: string;
 
-  @Field(() => Post)
-  @ManyToOne(() => Post)
-  post?: Post;
+  @HideField()
+  @ManyToOne(() => PostComment)
+  comment?: PostComment;
 
-  @Field(() => Int)
+  @HideField()
   @Column()
-  postId: number;
+  commentId: number;
 }

@@ -1,6 +1,7 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
+import { PostCommentImage } from '../../image/entities/post-comment-image.entity';
 import { Post } from '../../post/entities/post.entity';
 
 @ObjectType()
@@ -10,15 +11,18 @@ export class PostComment extends BaseEntity {
   @Column()
   text: string;
 
-  @Field(() => Int)
-  @Column()
-  rating: number = 0;
+  @Field(() => [PostCommentImage], { nullable: 'items' })
+  @ManyToOne(
+    () => PostCommentImage,
+    (postCommentImage) => postCommentImage.comment,
+  )
+  images: PostCommentImage[];
 
-  @Field(() => Post)
+  @HideField()
   @ManyToOne(() => Post)
   post?: Post;
 
-  @Field(() => Int)
+  @HideField()
   @Column()
   postId: number;
 

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommentModule } from '../comment/comment.module';
 import { ImageModule } from '../image/image.module';
@@ -14,7 +14,7 @@ import { PostService } from './post.service';
     TypeOrmModule.forFeature([Post]),
     ImageModule,
     TagModule,
-    CommentModule,
+    forwardRef(() => CommentModule),
     VoteModule,
   ],
   providers: [PostResolver, PostService, PostLoaders],

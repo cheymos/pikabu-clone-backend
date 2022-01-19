@@ -14,6 +14,8 @@ import { AlreadyVotedError } from '../../common/graphql/errors/already-voted.err
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
+import { CommentService } from '../comment/comment.service';
+import { CreatePostCommentData } from '../comment/inputs/create-post-comment-data.input';
 import { PostImage } from '../image/entities/post-image.entity';
 import { PostTag } from '../tag/entities/post-tag.entity';
 import { PostVote } from '../vote/entities/post-vote.entity';
@@ -32,6 +34,7 @@ export class PostResolver {
     private readonly postService: PostService,
     private readonly postLoaders: PostLoaders,
     private readonly likeService: VoteService,
+    private readonly commentService: CommentService,
   ) {}
 
   @Query(() => PostResult)
@@ -94,6 +97,15 @@ export class PostResolver {
     @UserId() userId: string,
   ): Promise<Post | AlreadyVotedError | NotFoundError> {
     return this.likeService.addLikeToPost(postId, VoteValue.DISLIKE, userId);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => PostResult)
+  async postAddComment(
+    @Args('data') data: CreatePostCommentData,
+    @UserId() userId: string,
+  ) {
+    return this.commentService.addToPost(data, userId);
   }
 }
 
