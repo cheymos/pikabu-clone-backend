@@ -2,8 +2,8 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { PostImage } from '../../image/entities/post-image.entity';
-import { PostLike } from '../../like/entities/post-like.entity';
 import { PostTag } from '../../tag/entities/post-tag.entity';
+import { PostVote } from '../../vote/entities/post-vote.entity';
 
 @ObjectType()
 @Entity('posts')
@@ -29,9 +29,9 @@ export class Post extends BaseEntity {
   @OneToMany(() => PostTag, (postTag) => postTag.post)
   tags?: PostTag[];
 
-  @Field(() => [PostLike], { nullable: 'items' })
-  @OneToMany(() => PostLike, (postLike) => postLike.post)
-  likes?: PostLike[];
+  @Field(() => [PostVote], { nullable: 'items' })
+  @OneToMany(() => PostVote, (postLike) => postLike.post)
+  votes?: PostVote[];
 
   @Field()
   @Column()

@@ -4,21 +4,21 @@ import { Repository } from 'typeorm';
 import { AlreadyVotedError } from '../../common/graphql/errors/already-voted.error';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { Post } from '../post/entities/post.entity';
-import { PostLike } from './entities/post-like.entity';
-import { LikeValue } from './enums/like-value.enum';
+import { PostVote } from './entities/post-vote.entity';
+import { VoteValue } from './enums/vote-value.enum';
 
 @Injectable()
-export class LikeService {
+export class VoteService {
   constructor(
-    @InjectRepository(PostLike)
-    private readonly postLikeRepository: Repository<PostLike>,
+    @InjectRepository(PostVote)
+    private readonly postVoteRepository: Repository<PostVote>,
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
   ) {}
 
   async addLikeToPost(
     postId: number,
-    likeValue: LikeValue,
+    voteValue: VoteValue,
     userId: string,
   ): Promise<Post | AlreadyVotedError | NotFoundError> {
     // 4 queries
@@ -31,39 +31,40 @@ export class LikeService {
     const post = await this.postRepository
       .createQueryBuilder('posts')
       .andWhereInIds(postId)
-      .innerJoinAndSelect('posts.likes', 'postLikes')
+      .innerJoinAndSelect('posts.votes', 'postVotes')
       .getOne();
 
     if (!post) return new NotFoundError('Post not found');
 
-    const vote = post.likes?.find((like) => like.ownerId === userId);
+    const vote = post.votes?.find((vote) => vote.ownerId === userId);
 
-    if (vote && vote.value === likeValue) {
-      const errorVotePhrase = this.getPhraseVoteError(likeValue);
+    if (vote && vote.value === voteValue) {
+      const errorVotePhrase = this.getPhraseVoteError(voteValue);
 
       return new AlreadyVotedError(
         `The current user has already ${errorVotePhrase}`,
       );
     }
 
-    if (vote && vote.value !== likeValue) {
-      likeValue = likeValue !== LikeValue.YES ? LikeValue.NO : LikeValue.YES;
+    if (vote && vote.value !== voteValue) {
+      voteValue =
+        voteValue !== VoteValue.LIKE ? VoteValue.DISLIKE : VoteValue.LIKE;
     }
 
-    const likeCandidate = this.postLikeRepository.create({
+    const newPostVote = this.postVoteRepository.create({
       id: vote?.id,
       postId: postId,
-      value: likeValue,
+      value: voteValue,
       ownerId: userId,
     });
 
-    const postLike = await this.postLikeRepository.save(likeCandidate);
-    post.likes?.push(postLike);
+    const postVote = await this.postVoteRepository.save(newPostVote);
+    post.votes?.push(postVote);
 
     return post;
   }
 
-  private getPhraseVoteError(likeValue: LikeValue) {
-    return likeValue === LikeValue.YES ? 'liked' : 'disliked';
+  private getPhraseVoteError(likeValue: VoteValue) {
+    return likeValue === VoteValue.LIKE ? 'liked' : 'disliked';
   }
 }

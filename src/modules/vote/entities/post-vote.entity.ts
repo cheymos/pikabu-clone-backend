@@ -1,26 +1,26 @@
 import { Field, HideField, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from '../../post/entities/post.entity';
-import { LikeValue } from '../enums/like-value.enum';
+import { VoteValue } from '../enums/vote-value.enum';
 
 @ObjectType()
-@Entity('post_likes')
-export class PostLike {
+@Entity('post_votes')
+export class PostVote {
   @HideField()
   @PrimaryGeneratedColumn()
   readonly id: number;
 
   @HideField()
-  @ManyToOne(() => Post, (post) => post.likes)
+  @ManyToOne(() => Post, (post) => post.votes)
   post?: Post;
 
   @HideField()
   @Column()
   postId: number;
 
-  @Field(() => LikeValue)
-  @Column({ type: 'enum', enum: LikeValue })
-  value: LikeValue;
+  @Field(() => VoteValue)
+  @Column({ type: 'enum', enum: VoteValue })
+  value: VoteValue;
 
   @Field()
   @Column()

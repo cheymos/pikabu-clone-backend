@@ -15,9 +15,9 @@ import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
 import { PostImage } from '../image/entities/post-image.entity';
-import { LikeValue } from '../like/enums/like-value.enum';
-import { LikeService } from '../like/like.service';
 import { PostTag } from '../tag/entities/post-tag.entity';
+import { VoteValue } from '../vote/enums/vote-value.enum';
+import { VoteService } from '../vote/vote.service';
 import { Post } from './entities/post.entity';
 import { CreatePostData } from './inputs/create-post-data.input';
 import { PostLoaders } from './post.loaders';
@@ -29,7 +29,7 @@ export class PostResolver {
   constructor(
     private readonly postService: PostService,
     private readonly postLoaders: PostLoaders,
-    private readonly likeService: LikeService,
+    private readonly likeService: VoteService,
   ) {}
 
   @Query(() => PostResult)
@@ -71,7 +71,7 @@ export class PostResolver {
     @IdArg() postId: number,
     @UserId() userId: string,
   ): Promise<Post | AlreadyVotedError | NotFoundError> {
-    return this.likeService.addLikeToPost(postId, LikeValue.YES, userId);
+    return this.likeService.addLikeToPost(postId, VoteValue.LIKE, userId);
   }
 
   @UseGuards(GqlAuthGuard)
@@ -80,7 +80,7 @@ export class PostResolver {
     @IdArg() postId: number,
     @UserId() userId: string,
   ): Promise<Post | AlreadyVotedError | NotFoundError> {
-    return this.likeService.addLikeToPost(postId, LikeValue.NO, userId);
+    return this.likeService.addLikeToPost(postId, VoteValue.DISLIKE, userId);
   }
 }
 

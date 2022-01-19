@@ -22,11 +22,6 @@ interface Error {
   message: String!
 }
 
-enum LikeValue {
-  NO
-  YES
-}
-
 type Mutation {
   postCreate(data: CreatePostData!): Post!
   postDisLike(id: ID!): PostLikeResult!
@@ -51,21 +46,16 @@ type Post {
   description: String!
   id: ID!
   images: [PostImage]!
-  likes: [PostLike]!
   ownerId: String!
   rating: Int!
   tags: [PostTag]!
   title: String!
+  votes: [PostVote]!
 }
 
 type PostImage {
   filePath: String!
   id: ID!
-}
-
-type PostLike {
-  ownerId: String!
-  value: LikeValue!
 }
 
 union PostLikeResult = AlreadyVotedError | NotFoundError | Post
@@ -82,7 +72,17 @@ type PostTag {
   name: String!
 }
 
+type PostVote {
+  ownerId: String!
+  value: VoteValue!
+}
+
 type Query {
   post(id: ID!): PostResult!
   posts(page: Int = 1, perPage: Int = 20): PostPagination!
+}
+
+enum VoteValue {
+  DISLIKE
+  LIKE
 }
