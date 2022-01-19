@@ -15,10 +15,12 @@ export class TypeOrmConfig implements TypeOrmOptionsFactory {
       entities: [join(__dirname, '..', 'modules', '**', '*.entity{.ts,.js}')],
       synchronize: true,
       logging: process.env.NODE_ENV === 'production' ? undefined : ['query'],
-      // migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
-      // cli: {
-      //   migrationsDir: 'src/database/migrations',
-      // },
+      migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
+      cli: {
+        migrationsDir: 'src/database/migrations',
+      },
     };
   }
 }
+
+export default new TypeOrmConfig().createTypeOrmOptions();
