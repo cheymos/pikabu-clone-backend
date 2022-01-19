@@ -33,6 +33,14 @@ export class Post extends BaseEntity {
   @OneToMany(() => PostVote, (postLike) => postLike.post)
   votes?: PostVote[];
 
+  @Field(() => Int)
+  @Column({ default: 0 })
+  likes: number;
+
+  @Field(() => Int)
+  @Column({ default: 0 })
+  dislikes: number;
+
   @Field()
   @Column()
   ownerId: string;

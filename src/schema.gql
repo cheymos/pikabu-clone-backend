@@ -44,8 +44,10 @@ type PaginationInfo {
 type Post {
   createdAt: DateTime!
   description: String!
+  dislikes: Int!
   id: ID!
   images: [PostImage]!
+  likes: Int!
   ownerId: String!
   rating: Int!
   tags: [PostTag]!
