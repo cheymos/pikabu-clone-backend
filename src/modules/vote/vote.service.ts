@@ -31,7 +31,7 @@ export class VoteService {
     const post = await this.postRepository
       .createQueryBuilder('posts')
       .andWhereInIds(postId)
-      .innerJoinAndSelect('posts.votes', 'postVotes')
+      .leftJoinAndSelect('posts.votes', 'postVotes')
       .getOne();
 
     if (!post) return new NotFoundError('Post not found');
