@@ -4,6 +4,8 @@ import { PostImage } from '../image/entities/post-image.entity';
 import { ImageService } from '../image/image.service';
 import { PostTag } from '../tag/entities/post-tag.entity';
 import { TagService } from '../tag/tag.service';
+import { PostVote } from '../vote/entities/post-vote.entity';
+import { VoteService } from '../vote/vote.service';
 
 // MENTOR: А можно ли вообще так делать?)
 @Injectable({ scope: Scope.REQUEST })
@@ -11,6 +13,7 @@ export class PostLoaders {
   constructor(
     private readonly postImageService: ImageService,
     private readonly postTagService: TagService,
+    private readonly postVoteService: VoteService,
   ) {}
 
   readonly batchImages = new DataLoader(async (postIds: number[]) => {
@@ -43,5 +46,21 @@ export class PostLoaders {
     });
 
     return tagIds.map((id) => postIdToTags[id] || []);
+  });
+
+  readonly batchVotes = new DataLoader(async (voteIds: number[]) => {
+    const votes = await this.postVoteService.getByPostIds(voteIds);
+
+    const postIdToVotes: { [key: string]: PostVote[] } = {};
+
+    votes.forEach((vote) => {
+      if (!postIdToVotes[vote.postId]) {
+        postIdToVotes[vote.postId] = [vote];
+      } else {
+        postIdToVotes[vote.postId].push(vote);
+      }
+    });
+
+    return voteIds.map((id) => postIdToVotes[id] || []);
   });
 }

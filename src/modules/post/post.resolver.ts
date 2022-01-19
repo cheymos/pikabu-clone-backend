@@ -16,6 +16,7 @@ import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
 import { PostImage } from '../image/entities/post-image.entity';
 import { PostTag } from '../tag/entities/post-tag.entity';
+import { PostVote } from '../vote/entities/post-vote.entity';
 import { VoteValue } from '../vote/enums/vote-value.enum';
 import { VoteService } from '../vote/vote.service';
 import { Post } from './entities/post.entity';
@@ -54,6 +55,13 @@ export class PostResolver {
     if (tags) return tags;
 
     return this.postLoaders.batchTags.load(id);
+  }
+
+  @ResolveField(() => [PostVote])
+  votes(@Parent() { id, votes }: Post) {
+    if (votes) return votes;
+
+    return this.postLoaders.batchVotes.load(id);
   }
 
   @UseGuards(GqlAuthGuard)

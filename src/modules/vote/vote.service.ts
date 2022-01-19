@@ -64,6 +64,13 @@ export class VoteService {
     return post;
   }
 
+  async getByPostIds(ids: number[]): Promise<PostVote[]> {
+    return this.postVoteRepository
+      .createQueryBuilder('postVote')
+      .where('postVote.postId IN (:...ids)', { ids })
+      .getMany();
+  }
+
   private getPhraseVoteError(likeValue: VoteValue) {
     return likeValue === VoteValue.LIKE ? 'liked' : 'disliked';
   }
