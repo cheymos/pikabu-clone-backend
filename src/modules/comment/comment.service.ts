@@ -47,4 +47,11 @@ export class CommentService {
 
     return post;
   }
+
+  async getByPostIds(ids: number[]): Promise<PostComment[]> {
+    return this.commentRepository
+      .createQueryBuilder('comment')
+      .where('comment.postId IN (:...ids)', { ids })
+      .getMany();
+  }
 }

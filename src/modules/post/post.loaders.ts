@@ -1,5 +1,7 @@
 import { Injectable, Scope } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
+import { CommentService } from '../comment/comment.service';
+import { PostComment } from '../comment/entities/post-comment.entity';
 import { PostImage } from '../image/entities/post-image.entity';
 import { ImageService } from '../image/image.service';
 import { PostTag } from '../tag/entities/post-tag.entity';
@@ -14,6 +16,7 @@ export class PostLoaders {
     private readonly postImageService: ImageService,
     private readonly postTagService: TagService,
     private readonly postVoteService: VoteService,
+    private readonly postCommentService: CommentService,
   ) {}
 
   readonly batchImages = new DataLoader(async (postIds: number[]) => {
@@ -62,5 +65,21 @@ export class PostLoaders {
     });
 
     return voteIds.map((id) => postIdToVotes[id] || []);
+  });
+
+  readonly batchComments = new DataLoader(async (commentIds: number[]) => {
+    const comments = await this.postCommentService.getByPostIds(commentIds);
+
+    const postIdToComments: { [key: string]: PostComment[] } = {};
+
+    comments.forEach((comment) => {
+      if (!postIdToComments[comment.postId]) {
+        postIdToComments[comment.postId] = [comment];
+      } else {
+        postIdToComments[comment.postId].push(comment);
+      }
+    });
+
+    return commentIds.map((id) => postIdToComments[id] || []);
   });
 }

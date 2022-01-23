@@ -15,6 +15,7 @@ import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
 import { CommentService } from '../comment/comment.service';
+import { PostComment } from '../comment/entities/post-comment.entity';
 import { CreatePostCommentData } from '../comment/inputs/create-post-comment-data.input';
 import { PostImage } from '../image/entities/post-image.entity';
 import { PostTag } from '../tag/entities/post-tag.entity';
@@ -73,6 +74,13 @@ export class PostResolver {
     if (votes) return votes;
 
     return this.postLoaders.batchVotes.load(id);
+  }
+
+  @ResolveField(() => [PostComment])
+  comments(@Parent() { id, comments }: Post) {
+    if (comments) return comments;
+
+    return this.postLoaders.batchComments.load(id);
   }
 
   @UseGuards(GqlAuthGuard)
