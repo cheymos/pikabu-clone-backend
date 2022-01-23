@@ -6,6 +6,11 @@ type AlreadyVotedError implements Error {
   message: String!
 }
 
+type CommentVote {
+  ownerId: String!
+  value: VoteValue!
+}
+
 input CreatePostCommentData {
   imagePaths: [String!]
   postId: Int!
@@ -30,6 +35,8 @@ interface Error {
 
 type Mutation {
   postAddComment(data: CreatePostCommentData!): PostResult!
+  postCommentDisLike(id: ID!): PostCommentResult!
+  postCommentLike(id: ID!): PostCommentResult!
   postCreate(data: CreatePostData!): Post!
   postDisLike(id: ID!): PostLikeResult!
   postLike(id: ID!): PostLikeResult!
@@ -68,12 +75,15 @@ type PostComment {
   images: [PostCommentImage]!
   ownerId: String!
   text: String!
+  votes: [CommentVote]!
 }
 
 type PostCommentImage {
   filePath: String!
   id: ID!
 }
+
+union PostCommentResult = AlreadyVotedError | NotFoundError | PostComment
 
 input PostFilter {
   group: PostGroup
