@@ -24,6 +24,7 @@ import { VoteService } from '../vote/vote.service';
 import { Post } from './entities/post.entity';
 import { PostSort } from './enums/post-sort.enum';
 import { CreatePostData } from './inputs/create-post-data.input';
+import { PostFilter } from './inputs/post-filter.input';
 import { PostLoaders } from './post.loaders';
 import { PostService } from './post.service';
 import { PostPagination } from './types/post-pagination.type';
@@ -47,8 +48,10 @@ export class PostResolver {
     @Args() paginationArgs: PaginationArgs,
     @Args('postSort', { type: () => [PostSort], nullable: true })
     sortOption: PostSort[],
+    @Args('postFilter', { type: () => PostFilter, nullable: true })
+    filterOptions: PostFilter,
   ): Promise<PostPagination> {
-    return this.postService.getAll(paginationArgs, sortOption);
+    return this.postService.getAll(paginationArgs, sortOption, filterOptions);
   }
 
   @ResolveField(() => [PostImage])

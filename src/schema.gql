@@ -75,6 +75,17 @@ type PostCommentImage {
   id: ID!
 }
 
+input PostFilter {
+  group: PostGroup
+  tags: [String!]
+}
+
+enum PostGroup {
+  BEST
+  HOT
+  RECENT
+}
+
 type PostImage {
   filePath: String!
   id: ID!
@@ -108,7 +119,7 @@ type PostVote {
 
 type Query {
   post(id: ID!): PostResult!
-  posts(page: Int = 1, perPage: Int = 20, postSort: [PostSort!]): PostPagination!
+  posts(page: Int = 1, perPage: Int = 20, postFilter: PostFilter, postSort: [PostSort!]): PostPagination!
 }
 
 enum VoteValue {

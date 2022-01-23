@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserInputError } from 'apollo-server-express';
-import { Repository } from 'typeorm';
+import { FindConditions, MoreThan, Repository } from 'typeorm';
 import { PaginationArgs } from '../../common/graphql/args/pagination.args';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { PaginationInfo } from '../../common/graphql/types/pagination-result.type';
@@ -10,6 +10,7 @@ import { TagService } from '../tag/tag.service';
 import { Post } from './entities/post.entity';
 import { PostSort } from './enums/post-sort.enum';
 import { CreatePostData } from './inputs/create-post-data.input';
+import { PostFilter, PostGroup } from './inputs/post-filter.input';
 import { PostPagination } from './types/post-pagination.type';
 
 @Injectable()
@@ -51,7 +52,8 @@ export class PostService {
   // MENTOR: Логику с пагинацией лучше вынести из сервиса?
   async getAll(
     { page, perPage }: PaginationArgs,
-    sortOption: PostSort[],
+    sortOption?: PostSort[],
+    filterOptions?: PostFilter,
   ): Promise<PostPagination> {
     if (page < 1 || perPage < 1)
       throw new UserInputError('Page and perPage must not be less than 1');
@@ -62,6 +64,8 @@ export class PostService {
       skip,
       take: perPage,
       order: this.getFieldOrder(sortOption),
+      where: this.getFilter(filterOptions),
+      relations: ['comments'],
     });
 
     const totalPages = Math.ceil(totalItems / perPage);
@@ -81,7 +85,22 @@ export class PostService {
     return { items, pageInfo };
   }
 
-  private getFieldOrder(sortOptions: PostSort[]) {
+  // FIXME: Rewrite this
+  private getFilter(filterOptions?: PostFilter): FindConditions<Post> {
+    const conditions: FindConditions<Post> = {};
+
+    if (!filterOptions) return conditions;
+
+    const { group } = filterOptions;
+
+    if (group === PostGroup.RECENT) {
+      conditions.createdAt = MoreThan(this.getYesterdayDate());
+    }
+
+    return conditions;
+  }
+
+  private getFieldOrder(sortOptions?: PostSort[]) {
     if (!Array.isArray(sortOptions) || !sortOptions.length) return undefined;
 
     const order: PostOrderType = {};
@@ -104,6 +123,10 @@ export class PostService {
     }
 
     return order;
+  }
+
+  private getYesterdayDate() {
+    return new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
   }
 }
 
