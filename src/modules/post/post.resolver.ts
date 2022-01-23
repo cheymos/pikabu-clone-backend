@@ -77,10 +77,13 @@ export class PostResolver {
   }
 
   @ResolveField(() => [PostComment])
-  comments(@Parent() { id, comments }: Post) {
+  comments(
+    @Args() paginationArgs: PaginationArgs,
+    @Parent() { id, comments }: Post,
+  ) {
     if (comments) return comments;
 
-    return this.postLoaders.batchComments.load(id);
+    return this.postLoaders.batchComments(paginationArgs).load(id);
   }
 
   @UseGuards(GqlAuthGuard)

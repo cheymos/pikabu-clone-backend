@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { POST_NOT_FOUND } from '../../common/constants/error.constants';
+import { PaginationArgs } from '../../common/graphql/args/pagination.args';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { ImageService } from '../image/image.service';
 import { Post } from '../post/entities/post.entity';
@@ -48,10 +49,17 @@ export class CommentService {
     return post;
   }
 
-  async getByPostIds(ids: number[]): Promise<PostComment[]> {
+  async getByPostIds(
+    ids: number[],
+    { page, perPage }: PaginationArgs,
+  ): Promise<PostComment[]> {
+    const skip = page * perPage - perPage;
+
     return this.commentRepository
       .createQueryBuilder('comment')
       .where('comment.postId IN (:...ids)', { ids })
+      .take(perPage)
+      .skip(skip)
       .getMany();
   }
 }

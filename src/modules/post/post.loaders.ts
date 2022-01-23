@@ -1,5 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
+import { PaginationArgs } from '../../common/graphql/args/pagination.args';
 import { CommentService } from '../comment/comment.service';
 import { PostComment } from '../comment/entities/post-comment.entity';
 import { PostImage } from '../image/entities/post-image.entity';
@@ -67,19 +68,20 @@ export class PostLoaders {
     return voteIds.map((id) => postIdToVotes[id] || []);
   });
 
-  readonly batchComments = new DataLoader(async (commentIds: number[]) => {
-    const comments = await this.postCommentService.getByPostIds(commentIds);
+  readonly batchComments = (paginationArgs: PaginationArgs) =>
+    new DataLoader(async (commentIds: number[]) => {
+      const comments = await this.postCommentService.getByPostIds(commentIds, paginationArgs);
 
-    const postIdToComments: { [key: string]: PostComment[] } = {};
+      const postIdToComments: { [key: string]: PostComment[] } = {};
 
-    comments.forEach((comment) => {
-      if (!postIdToComments[comment.postId]) {
-        postIdToComments[comment.postId] = [comment];
-      } else {
-        postIdToComments[comment.postId].push(comment);
-      }
+      comments.forEach((comment) => {
+        if (!postIdToComments[comment.postId]) {
+          postIdToComments[comment.postId] = [comment];
+        } else {
+          postIdToComments[comment.postId].push(comment);
+        }
+      });
+
+      return commentIds.map((id) => postIdToComments[id] || []);
     });
-
-    return commentIds.map((id) => postIdToComments[id] || []);
-  });
 }
