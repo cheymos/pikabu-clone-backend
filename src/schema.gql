@@ -64,7 +64,6 @@ type Post {
   images: [PostImage]!
   likes: Int!
   ownerId: String!
-  rating: Int!
   tags: [PostTag]!
   title: String!
   votes: [PostVote]!

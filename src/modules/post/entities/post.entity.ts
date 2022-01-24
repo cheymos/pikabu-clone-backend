@@ -17,10 +17,6 @@ export class Post extends BaseEntity {
   @Column()
   description: string;
 
-  @Field(() => Int)
-  @Column({ default: 0 })
-  rating: number;
-
   // MENTOR: Eage or not?
   @Field(() => [PostImage], { nullable: 'items' })
   @OneToMany(() => PostImage, (postImage) => postImage.post)
