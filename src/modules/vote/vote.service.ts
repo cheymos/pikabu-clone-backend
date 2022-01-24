@@ -118,6 +118,13 @@ export class VoteService {
       .getMany();
   }
 
+  async getByCommentIds(ids: number[]): Promise<CommentVote[]> {
+    return this.commentVoteRepository
+      .createQueryBuilder('commentVote')
+      .where('commentVote.commentId IN (:...ids)', { ids })
+      .getMany();
+  }
+
   private getPhraseVoteError(likeValue: VoteValue) {
     return likeValue === VoteValue.LIKE ? 'liked' : 'disliked';
   }

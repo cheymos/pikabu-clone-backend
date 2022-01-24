@@ -7,6 +7,7 @@ import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { ImageService } from '../image/image.service';
 import { Post } from '../post/entities/post.entity';
 import { PostComment } from './entities/post-comment.entity';
+import { CommentSort } from './enums/comment-sort.enum';
 import { CreatePostCommentData } from './inputs/create-post-comment-data.input';
 
 @Injectable()
@@ -52,14 +53,46 @@ export class CommentService {
   async getByPostIds(
     ids: number[],
     { page, perPage }: PaginationArgs,
+    sortOption: CommentSort[],
   ): Promise<PostComment[]> {
     const skip = page * perPage - perPage;
+    const fieldOrder = this.getFieldOrder(sortOption);
 
     return this.commentRepository
       .createQueryBuilder('comment')
       .where('comment.postId IN (:...ids)', { ids })
       .take(perPage)
       .skip(skip)
+      .orderBy(fieldOrder)
       .getMany();
   }
+
+  private getFieldOrder(sortOptions: CommentSort[]) {
+    if (!Array.isArray(sortOptions) || !sortOptions.length) return {};
+
+    const order: CommentOrderType = {};
+
+    for (const option of sortOptions) {
+      switch (option) {
+        case CommentSort.DATE_ASC:
+          order['comment.createdAt'] = 'ASC';
+          break;
+        case CommentSort.DATE_DESC:
+          order['comment.createdAt'] = 'DESC';
+          break;
+        case CommentSort.LIKE_ASC:
+          order['likes'] = 'ASC';
+          break;
+        case CommentSort.LIKE_DESC:
+          order['likes'] = 'DESC';
+          break;
+      }
+    }
+
+    return order;
+  }
 }
+
+export type CommentOrderType = {
+  [columnName: string]: 'ASC' | 'DESC';
+};

@@ -1,8 +1,9 @@
 import { Injectable, Scope } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
-import { PaginationArgs } from '../../common/graphql/args/pagination.args';
+import { LoaderArgs } from '../../common/types/loader-args.type';
 import { CommentService } from '../comment/comment.service';
 import { PostComment } from '../comment/entities/post-comment.entity';
+import { CommentSort } from '../comment/enums/comment-sort.enum';
 import { PostImage } from '../image/entities/post-image.entity';
 import { ImageService } from '../image/image.service';
 import { PostTag } from '../tag/entities/post-tag.entity';
@@ -68,9 +69,17 @@ export class PostLoaders {
     return voteIds.map((id) => postIdToVotes[id] || []);
   });
 
-  readonly batchComments = (paginationArgs: PaginationArgs) =>
-    new DataLoader(async (commentIds: number[]) => {
-      const comments = await this.postCommentService.getByPostIds(commentIds, paginationArgs);
+  readonly batchComments = new DataLoader(
+    async (params: LoaderArgs<CommentSort>[]) => {
+      const ids = params.map((param) => param.id)
+      const paginationArgs = params[0].paginationOptions;
+      const sortOption = params[0].sortOptions;
+
+      const comments = await this.postCommentService.getByPostIds(
+        ids,
+        paginationArgs,
+        sortOption,
+      );
 
       const postIdToComments: { [key: string]: PostComment[] } = {};
 
@@ -82,6 +91,7 @@ export class PostLoaders {
         }
       });
 
-      return commentIds.map((id) => postIdToComments[id] || []);
-    });
+      return ids.map((id) => postIdToComments[id] || []);
+    },
+  );
 }

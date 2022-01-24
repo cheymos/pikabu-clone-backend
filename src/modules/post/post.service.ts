@@ -65,7 +65,7 @@ export class PostService {
       take: perPage,
       order: this.getFieldOrder(sortOption),
       where: this.getFilter(filterOptions),
-      relations: ['comments'],
+      // relations: ['comments'],
     });
 
     const totalPages = Math.ceil(totalItems / perPage);

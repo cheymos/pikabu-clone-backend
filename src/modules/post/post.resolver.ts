@@ -16,6 +16,7 @@ import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
 import { CommentService } from '../comment/comment.service';
 import { PostComment } from '../comment/entities/post-comment.entity';
+import { CommentSort } from '../comment/enums/comment-sort.enum';
 import { CreatePostCommentData } from '../comment/inputs/create-post-comment-data.input';
 import { PostImage } from '../image/entities/post-image.entity';
 import { PostTag } from '../tag/entities/post-tag.entity';
@@ -78,12 +79,18 @@ export class PostResolver {
 
   @ResolveField(() => [PostComment])
   comments(
-    @Args() paginationArgs: PaginationArgs,
+    @Args() paginationOptions: PaginationArgs,
+    @Args('CommentSort', { type: () => [CommentSort], nullable: true })
+    sortOptions: CommentSort[],
     @Parent() { id, comments }: Post,
   ) {
     if (comments) return comments;
 
-    return this.postLoaders.batchComments(paginationArgs).load(id);
+    return this.postLoaders.batchComments.load({
+      paginationOptions,
+      id,
+      sortOptions,
+    });
   }
 
   @UseGuards(GqlAuthGuard)

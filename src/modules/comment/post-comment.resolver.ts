@@ -7,6 +7,7 @@ import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
 import { PostCommentImage } from '../image/entities/post-comment-image.entity';
+import { CommentVote } from '../vote/entities/comment-vote.entity';
 import { VoteValue } from '../vote/enums/vote-value.enum';
 import { VoteService } from '../vote/vote.service';
 import { CommentLoaders } from './comment.loader';
@@ -22,6 +23,11 @@ export class PostCommentResolver {
   @ResolveField(() => [PostCommentImage])
   images(@Parent() { id }: PostComment): Promise<PostCommentImage[]> {
     return this.postCommentLoaders.batchImages.load(id);
+  }
+
+  @ResolveField(() => [CommentVote])
+  votes(@Parent() { id }: PostComment) {
+    return this.postCommentLoaders.batchVotes.load(id);
   }
 
   @UseGuards(GqlAuthGuard)
