@@ -12,6 +12,7 @@ import { LocalFileModule } from './modules/local-file/local-file.module';
 import { PostModule } from './modules/post/post.module';
 import { TagModule } from './modules/tag/tag.module';
 import { VoteModule } from './modules/vote/vote.module';
+import { BookmarkModule } from './modules/bookmark/bookmark.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { VoteModule } from './modules/vote/vote.module';
     TagModule,
     CommentModule,
     VoteModule,
+    BookmarkModule,
   ],
   providers: [JwtStrategy],
 })

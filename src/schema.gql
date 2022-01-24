@@ -2,8 +2,26 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type AlreadyVotedError implements Error {
+type AlreadyVotedError implements BaseError {
   message: String!
+}
+
+interface BaseError {
+  message: String!
+}
+
+type Bookmark {
+  id: ID!
+  itemId: Int!
+  ownerId: String!
+  type: BookmarkType!
+}
+
+union BookmarkResult = Bookmark | ItemNotFoundError
+
+enum BookmarkType {
+  Comment
+  Post
 }
 
 enum CommentSort {
@@ -16,6 +34,11 @@ enum CommentSort {
 type CommentVote {
   ownerId: String!
   value: VoteValue!
+}
+
+input CreateBookmarkData {
+  itemId: Int!
+  type: BookmarkType!
 }
 
 input CreatePostCommentData {
@@ -36,11 +59,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-interface Error {
+type ItemNotFoundError implements BaseError {
   message: String!
 }
 
 type Mutation {
+  bookmarkCreate(data: CreateBookmarkData!): BookmarkResult!
   postAddComment(data: CreatePostCommentData!): PostResult!
   postCommentDisLike(id: ID!): PostCommentResult!
   postCommentLike(id: ID!): PostCommentResult!
@@ -49,7 +73,7 @@ type Mutation {
   postLike(id: ID!): PostLikeResult!
 }
 
-type NotFoundError implements Error {
+type NotFoundError implements BaseError {
   message: String!
 }
 
