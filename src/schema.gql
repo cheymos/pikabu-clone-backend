@@ -12,9 +12,15 @@ interface BaseError {
 
 type Bookmark {
   id: ID!
+  item: Item!
   itemId: Int!
   ownerId: String!
   type: BookmarkType!
+}
+
+type BookmarkPagination {
+  items: [Bookmark!]!
+  pageInfo: PaginationInfo!
 }
 
 union BookmarkResult = Bookmark | ItemNotFoundError
@@ -58,6 +64,8 @@ input CreatePostData {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+union Item = Post | PostComment
 
 type ItemNotFoundError implements BaseError {
   message: String!
@@ -159,6 +167,7 @@ type PostVote {
 }
 
 type Query {
+  bookmarks(page: Int = 1, perPage: Int = 20): BookmarkPagination!
   post(id: ID!): PostResult!
   posts(page: Int = 1, perPage: Int = 20, postFilter: PostFilter, postSort: [PostSort!]): PostPagination!
 }
