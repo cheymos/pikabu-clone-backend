@@ -4,7 +4,7 @@ import { BaseEntity } from '../../../common/entities/base.entity';
 import { Post } from '../../post/entities/post.entity';
 
 @ObjectType()
-@Entity()
+@Entity('post_images')
 export class PostImage extends BaseEntity {
   @Field()
   @Column()

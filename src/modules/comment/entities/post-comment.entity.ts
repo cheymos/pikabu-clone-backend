@@ -19,11 +19,8 @@ export class PostComment extends BaseEntity {
   text: string;
 
   @Field(() => [PostCommentImage], { nullable: 'items' })
-  @ManyToOne(
-    () => PostCommentImage,
-    (postCommentImage) => postCommentImage.comment,
-  )
-  images: PostCommentImage[];
+  @OneToMany(() => PostCommentImage, (image) => image.comment)
+  images?: PostCommentImage[];
 
   @Field(() => [CommentVote], { nullable: 'items' })
   @OneToMany(() => CommentVote, (commentVote) => commentVote.comment)
