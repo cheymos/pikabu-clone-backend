@@ -110,8 +110,10 @@ type Post {
 
 type PostComment {
   createdAt: DateTime!
+  dislikes: Int!
   id: ID!
   images: [PostCommentImage]!
+  likes: Int!
   ownerId: String!
   text: String!
   votes: [CommentVote]!

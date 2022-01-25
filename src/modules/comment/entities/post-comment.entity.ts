@@ -1,4 +1,4 @@
-import { Field, HideField, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -28,6 +28,14 @@ export class PostComment extends BaseEntity {
   @Field(() => [CommentVote], { nullable: 'items' })
   @OneToMany(() => CommentVote, (commentVote) => commentVote.comment)
   votes?: CommentVote[];
+
+  @Field(() => Int)
+  @Column({ default: 0 })
+  likes: number;
+
+  @Field(() => Int)
+  @Column({ default: 0 })
+  dislikes: number;
 
   @HideField()
   @ManyToOne(() => Post)
