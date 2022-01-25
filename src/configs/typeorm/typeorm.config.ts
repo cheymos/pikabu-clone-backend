@@ -4,7 +4,7 @@ import { join } from 'path';
 
 @Injectable()
 export class TypeOrmConfig implements TypeOrmOptionsFactory {
-  createTypeOrmOptions(): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {
+  createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
       host: process.env.TYPEORM_HOST,
@@ -12,12 +12,24 @@ export class TypeOrmConfig implements TypeOrmOptionsFactory {
       database: process.env.TYPEORM_DATABASE,
       username: process.env.TYPEORM_USERNAME,
       password: process.env.TYPEORM_PASSWORD,
-      entities: [join(__dirname, '..', 'modules', '**', '*.entity{.ts,.js}')],
+      entities: [
+        join(__dirname, '..', '..', 'modules', '**', '*.entity{.ts,.js}'),
+      ],
       synchronize: true,
       logging: process.env.NODE_ENV === 'production' ? undefined : ['query'],
-      migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
+      migrations: [
+        join(
+          __dirname,
+          '..',
+          '..',
+          'database',
+          'migrations',
+          '**',
+          '*{.ts,.js}',
+        ),
+      ],
       cli: {
-        migrationsDir: 'src/database/migrations',
+        migrationsDir: join('src', 'database', 'migrations'),
       },
     };
   }

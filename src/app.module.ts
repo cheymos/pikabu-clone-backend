@@ -5,14 +5,14 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { JwtStrategy } from './common/jwt.strategy';
-import { TypeOrmConfig } from './configs/typeorm.config';
+import { TypeOrmConfig } from './configs/typeorm';
+import { BookmarkModule } from './modules/bookmark/bookmark.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { ImageModule } from './modules/image/image.module';
 import { LocalFileModule } from './modules/local-file/local-file.module';
 import { PostModule } from './modules/post/post.module';
 import { TagModule } from './modules/tag/tag.module';
 import { VoteModule } from './modules/vote/vote.module';
-import { BookmarkModule } from './modules/bookmark/bookmark.module';
 
 @Module({
   imports: [
