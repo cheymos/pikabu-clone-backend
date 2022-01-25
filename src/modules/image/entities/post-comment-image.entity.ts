@@ -11,7 +11,7 @@ export class PostCommentImage extends BaseEntity {
   filePath: string;
 
   @HideField()
-  @ManyToOne(() => PostComment)
+  @ManyToOne(() => PostComment, { onDelete: 'CASCADE' })
   comment?: PostComment;
 
   @HideField()

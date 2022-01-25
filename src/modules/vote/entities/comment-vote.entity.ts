@@ -11,7 +11,7 @@ export class CommentVote {
   readonly id: number;
 
   @HideField()
-  @ManyToOne(() => PostComment, (post) => post.votes)
+  @ManyToOne(() => PostComment, (post) => post.votes, { onDelete: 'CASCADE' })
   comment?: PostComment;
 
   @HideField()

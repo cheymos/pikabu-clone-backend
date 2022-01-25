@@ -17,7 +17,6 @@ export class Post extends BaseEntity {
   @Column()
   description: string;
 
-  // MENTOR: Eage or not?
   @Field(() => [PostImage], { nullable: 'items' })
   @OneToMany(() => PostImage, (postImage) => postImage.post)
   images?: PostImage[];

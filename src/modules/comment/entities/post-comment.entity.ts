@@ -38,7 +38,7 @@ export class PostComment extends BaseEntity {
   dislikes: number;
 
   @HideField()
-  @ManyToOne(() => Post)
+  @ManyToOne(() => Post, { onDelete: 'CASCADE' })
   post?: Post;
 
   @HideField()

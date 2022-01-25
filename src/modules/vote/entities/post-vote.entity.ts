@@ -11,7 +11,7 @@ export class PostVote {
   readonly id: number;
 
   @HideField()
-  @ManyToOne(() => Post, (post) => post.votes)
+  @ManyToOne(() => Post, (post) => post.votes, { onDelete: 'CASCADE' })
   post?: Post;
 
   @HideField()
