@@ -2,7 +2,7 @@ import { Injectable, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as DataLoader from 'dataloader';
 import { Repository } from 'typeorm';
-import { PostComment } from '../comment/entities/post-comment.entity';
+import { PostComment } from '../post-comment/entities/post-comment.entity';
 import { Post } from '../post/entities/post.entity';
 import { BookmarkType } from './enums/bookmark-type.enum';
 

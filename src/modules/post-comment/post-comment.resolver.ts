@@ -10,13 +10,13 @@ import { PostCommentImage } from '../image/entities/post-comment-image.entity';
 import { CommentVote } from '../vote/entities/comment-vote.entity';
 import { VoteValue } from '../vote/enums/vote-value.enum';
 import { VoteService } from '../vote/vote.service';
-import { CommentLoaders } from './comment.loader';
 import { PostComment } from './entities/post-comment.entity';
+import { PostCommentLoaders } from './post-comment.loader';
 
 @Resolver(() => PostComment)
 export class PostCommentResolver {
   constructor(
-    private readonly postCommentLoaders: CommentLoaders,
+    private readonly postCommentLoaders: PostCommentLoaders,
     private readonly voteService: VoteService,
   ) {}
 

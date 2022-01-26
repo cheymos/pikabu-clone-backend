@@ -1,9 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
-import { PostComment } from '../../comment/entities/post-comment.entity';
 import { PostImage } from '../../image/entities/post-image.entity';
-import { PostTag } from '../../tag/entities/post-tag.entity';
+import { PostComment } from '../../post-comment/entities/post-comment.entity';
+import { PostTag } from '../../post-tag/entities/post-tag.entity';
 import { PostVote } from '../../vote/entities/post-vote.entity';
 
 @ObjectType()

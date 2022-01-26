@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AlreadyVotedError } from '../../common/graphql/errors/already-voted.error';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
-import { PostComment } from '../comment/entities/post-comment.entity';
+import { PostComment } from '../post-comment/entities/post-comment.entity';
 import { Post } from '../post/entities/post.entity';
 import { CommentVote } from './entities/comment-vote.entity';
 import { PostVote } from './entities/post-vote.entity';

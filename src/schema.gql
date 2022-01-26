@@ -38,6 +38,7 @@ enum CommentSort {
 }
 
 type CommentVote {
+  id: ID!
   ownerId: String!
   value: VoteValue!
 }
@@ -164,6 +165,7 @@ type PostTag {
 }
 
 type PostVote {
+  id: ID!
   ownerId: String!
   value: VoteValue!
 }

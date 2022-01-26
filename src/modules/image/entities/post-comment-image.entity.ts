@@ -1,7 +1,7 @@
 import { Field, HideField, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
-import { PostComment } from '../../comment/entities/post-comment.entity';
+import { PostComment } from '../../post-comment/entities/post-comment.entity';
 
 @ObjectType()
 @Entity('post_comment_images')

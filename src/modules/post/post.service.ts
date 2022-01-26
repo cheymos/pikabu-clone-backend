@@ -6,7 +6,7 @@ import { PaginationArgs } from '../../common/graphql/args/pagination.args';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { PaginationInfo } from '../../common/graphql/types/pagination-result.type';
 import { ImageService } from '../image/image.service';
-import { TagService } from '../tag/tag.service';
+import { PostTagService } from '../post-tag/post-tag.service';
 import { Post } from './entities/post.entity';
 import { PostSort } from './enums/post-sort.enum';
 import { CreatePostData } from './inputs/create-post-data.input';
@@ -18,7 +18,7 @@ export class PostService {
   constructor(
     @InjectRepository(Post) private readonly postRepository: Repository<Post>,
     private readonly postImageService: ImageService,
-    private readonly postTagService: TagService,
+    private readonly postTagService: PostTagService,
   ) {}
 
   async getById(id: number): Promise<Post | NotFoundError> {

@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { PostTag } from './entities/post-tag.entity';
 
 @Injectable()
-export class TagService {
+export class PostTagService {
   constructor(
     @InjectRepository(PostTag)
     private readonly postTagRepository: Repository<PostTag>,

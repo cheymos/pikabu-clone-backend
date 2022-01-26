@@ -11,7 +11,7 @@ import { CommentSort } from './enums/comment-sort.enum';
 import { CreatePostCommentData } from './inputs/create-post-comment-data.input';
 
 @Injectable()
-export class CommentService {
+export class PostCommentService {
   constructor(
     @InjectRepository(PostComment)
     private readonly commentRepository: Repository<PostComment>,

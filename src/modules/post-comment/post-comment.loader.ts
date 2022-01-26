@@ -6,7 +6,7 @@ import { CommentVote } from '../vote/entities/comment-vote.entity';
 import { VoteService } from '../vote/vote.service';
 
 @Injectable({ scope: Scope.REQUEST })
-export class CommentLoaders {
+export class PostCommentLoaders {
   constructor(
     private readonly postImageService: ImageService,
     private readonly voteService: VoteService,

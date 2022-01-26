@@ -1,13 +1,13 @@
 import { Injectable, Scope } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import { LoaderArgs } from '../../common/types/loader-args.type';
-import { CommentService } from '../comment/comment.service';
-import { PostComment } from '../comment/entities/post-comment.entity';
-import { CommentSort } from '../comment/enums/comment-sort.enum';
 import { PostImage } from '../image/entities/post-image.entity';
 import { ImageService } from '../image/image.service';
-import { PostTag } from '../tag/entities/post-tag.entity';
-import { TagService } from '../tag/tag.service';
+import { PostComment } from '../post-comment/entities/post-comment.entity';
+import { CommentSort } from '../post-comment/enums/comment-sort.enum';
+import { PostCommentService } from '../post-comment/post-comment.service';
+import { PostTag } from '../post-tag/entities/post-tag.entity';
+import { PostTagService } from '../post-tag/post-tag.service';
 import { PostVote } from '../vote/entities/post-vote.entity';
 import { VoteService } from '../vote/vote.service';
 
@@ -16,9 +16,9 @@ import { VoteService } from '../vote/vote.service';
 export class PostLoaders {
   constructor(
     private readonly postImageService: ImageService,
-    private readonly postTagService: TagService,
+    private readonly postTagService: PostTagService,
     private readonly postVoteService: VoteService,
-    private readonly postCommentService: CommentService,
+    private readonly postCommentService: PostCommentService,
   ) {}
 
   readonly batchImages = new DataLoader(async (postIds: number[]) => {

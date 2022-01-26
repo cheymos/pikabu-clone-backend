@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaginationArgs } from '../../common/graphql/args/pagination.args';
 import { PaginationInfo } from '../../common/graphql/types/pagination-result.type';
-import { PostComment } from '../comment/entities/post-comment.entity';
+import { PostComment } from '../post-comment/entities/post-comment.entity';
 import { Post } from '../post/entities/post.entity';
 import { Bookmark } from './entities/bookmark.entity';
 import { BookmarkType } from './enums/bookmark-type.enum';

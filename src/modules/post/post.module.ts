@@ -1,8 +1,8 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommentModule } from '../comment/comment.module';
 import { ImageModule } from '../image/image.module';
-import { TagModule } from '../tag/tag.module';
+import { PostCommentModule } from '../post-comment/post-comment.module';
+import { PostTagModule } from '../post-tag/post-tag.module';
 import { VoteModule } from '../vote/vote.module';
 import { Post } from './entities/post.entity';
 import { PostLoaders } from './post.loaders';
@@ -13,8 +13,8 @@ import { PostService } from './post.service';
   imports: [
     TypeOrmModule.forFeature([Post]),
     ImageModule,
-    TagModule,
-    forwardRef(() => CommentModule),
+    PostTagModule,
+    forwardRef(() => PostCommentModule),
     VoteModule,
   ],
   providers: [PostResolver, PostService, PostLoaders],

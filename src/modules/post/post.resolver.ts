@@ -14,12 +14,12 @@ import { AlreadyVotedError } from '../../common/graphql/errors/already-voted.err
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
 import { createUnionResult } from '../../utils/graphql';
-import { CommentService } from '../comment/comment.service';
-import { PostComment } from '../comment/entities/post-comment.entity';
-import { CommentSort } from '../comment/enums/comment-sort.enum';
-import { CreatePostCommentData } from '../comment/inputs/create-post-comment-data.input';
 import { PostImage } from '../image/entities/post-image.entity';
-import { PostTag } from '../tag/entities/post-tag.entity';
+import { PostComment } from '../post-comment/entities/post-comment.entity';
+import { CommentSort } from '../post-comment/enums/comment-sort.enum';
+import { CreatePostCommentData } from '../post-comment/inputs/create-post-comment-data.input';
+import { PostCommentService } from '../post-comment/post-comment.service';
+import { PostTag } from '../post-tag/entities/post-tag.entity';
 import { PostVote } from '../vote/entities/post-vote.entity';
 import { VoteValue } from '../vote/enums/vote-value.enum';
 import { VoteService } from '../vote/vote.service';
@@ -37,7 +37,7 @@ export class PostResolver {
     private readonly postService: PostService,
     private readonly postLoaders: PostLoaders,
     private readonly likeService: VoteService,
-    private readonly commentService: CommentService,
+    private readonly commentService: PostCommentService,
   ) {}
 
   @Query(() => PostResult)
