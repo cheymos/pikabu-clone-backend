@@ -29,16 +29,14 @@ export class ImageService {
       newPostImages.push(newPostImage);
     }
 
-    const postImages = await this.postImageRepository.save(newPostImages);
-
-    return postImages;
+    return this.postImageRepository.save(newPostImages);
   }
 
   async addToComment(
     commentId: number,
     imagePaths: string[],
   ): Promise<PostCommentImage[]> {
-    const newImages = [];
+    const newPostCommentImages = [];
 
     for (let imagePath of imagePaths) {
       const newImage = this.postCommentImageRepository.create({
@@ -46,12 +44,10 @@ export class ImageService {
         commentId,
       });
 
-      newImages.push(newImage);
+      newPostCommentImages.push(newImage);
     }
 
-    const commentImages = await this.postCommentImageRepository.save(newImages);
-
-    return commentImages;
+    return this.postCommentImageRepository.save(newPostCommentImages);
   }
 
   async getByPostIds(ids: number[]): Promise<PostImage[]> {

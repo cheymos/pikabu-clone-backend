@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LocalFile } from './entities/local-file.entity';
 import { LocalFileController } from './local-file.controller';
-import { LocalFile } from './local-file.entity';
 import { LocalFileService } from './local-file.service';
 
 @Module({

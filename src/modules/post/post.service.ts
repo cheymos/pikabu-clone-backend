@@ -17,7 +17,7 @@ import { PostPagination } from './types/post-pagination.type';
 export class PostService {
   constructor(
     @InjectRepository(Post) private readonly postRepository: Repository<Post>,
-    private readonly postImageService: ImageService,
+    private readonly imageService: ImageService,
     private readonly postTagService: PostTagService,
   ) {}
 
@@ -41,7 +41,7 @@ export class PostService {
     const post = await this.postRepository.save(newPost);
 
     if (Array.isArray(imagePaths) && imagePaths.length)
-      post.images = await this.postImageService.addToPost(post.id, imagePaths);
+      post.images = await this.imageService.addToPost(post.id, imagePaths);
 
     if (Array.isArray(tags) && tags.length)
       post.tags = await this.postTagService.addToPost(post.id, tags);
@@ -65,7 +65,6 @@ export class PostService {
       take: perPage,
       order: this.getFieldOrder(sortOption),
       where: this.getFilter(filterOptions),
-      // relations: ['comments'],
     });
 
     const totalPages = Math.ceil(totalItems / perPage);

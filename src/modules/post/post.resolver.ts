@@ -36,8 +36,8 @@ export class PostResolver {
   constructor(
     private readonly postService: PostService,
     private readonly postLoaders: PostLoaders,
-    private readonly likeService: VoteService,
-    private readonly commentService: PostCommentService,
+    private readonly voteService: VoteService,
+    private readonly postCommentService: PostCommentService,
   ) {}
 
   @Query(() => PostResult)
@@ -49,41 +49,41 @@ export class PostResolver {
   posts(
     @Args() paginationArgs: PaginationArgs,
     @Args('postSort', { type: () => [PostSort], nullable: true })
-    sortOption: PostSort[],
+    sortOptions: PostSort[],
     @Args('postFilter', { type: () => PostFilter, nullable: true })
     filterOptions: PostFilter,
   ): Promise<PostPagination> {
-    return this.postService.getAll(paginationArgs, sortOption, filterOptions);
+    return this.postService.getAll(paginationArgs, sortOptions, filterOptions);
   }
 
   @ResolveField(() => [PostImage])
-  images(@Parent() { id, images }: Post) {
+  async images(@Parent() { id, images }: Post): Promise<PostImage[]> {
     if (images) return images;
 
     return this.postLoaders.batchImages.load(id);
   }
 
   @ResolveField(() => [PostTag])
-  tags(@Parent() { id, tags }: Post) {
+  async tags(@Parent() { id, tags }: Post): Promise<PostTag[]> {
     if (tags) return tags;
 
     return this.postLoaders.batchTags.load(id);
   }
 
   @ResolveField(() => [PostVote])
-  votes(@Parent() { id, votes }: Post) {
+  async votes(@Parent() { id, votes }: Post): Promise<PostVote[]> {
     if (votes) return votes;
 
     return this.postLoaders.batchVotes.load(id);
   }
 
   @ResolveField(() => [PostComment])
-  comments(
+  async comments(
     @Args() paginationOptions: PaginationArgs,
     @Args('CommentSort', { type: () => [CommentSort], nullable: true })
     sortOptions: CommentSort[],
     @Parent() { id, comments }: Post,
-  ) {
+  ): Promise<PostComment[]> {
     if (comments) return comments;
 
     return this.postLoaders.batchComments.load({
@@ -108,7 +108,7 @@ export class PostResolver {
     @IdArg() postId: number,
     @UserId() userId: string,
   ): Promise<Post | AlreadyVotedError | NotFoundError> {
-    return this.likeService.addLikeToPost(postId, VoteValue.LIKE, userId);
+    return this.voteService.addLikeToPost(postId, VoteValue.LIKE, userId);
   }
 
   @UseGuards(GqlAuthGuard)
@@ -117,7 +117,7 @@ export class PostResolver {
     @IdArg() postId: number,
     @UserId() userId: string,
   ): Promise<Post | AlreadyVotedError | NotFoundError> {
-    return this.likeService.addLikeToPost(postId, VoteValue.DISLIKE, userId);
+    return this.voteService.addLikeToPost(postId, VoteValue.DISLIKE, userId);
   }
 
   @UseGuards(GqlAuthGuard)
@@ -125,8 +125,8 @@ export class PostResolver {
   async postAddComment(
     @Args('data') data: CreatePostCommentData,
     @UserId() userId: string,
-  ) {
-    return this.commentService.addToPost(data, userId);
+  ): Promise<Post | NotFoundError> {
+    return this.postCommentService.addToPost(data, userId);
   }
 }
 

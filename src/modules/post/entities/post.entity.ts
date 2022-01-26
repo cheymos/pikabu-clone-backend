@@ -26,7 +26,7 @@ export class Post extends BaseEntity {
   tags?: PostTag[];
 
   @Field(() => [PostVote], { nullable: 'items' })
-  @OneToMany(() => PostVote, (postLike) => postLike.post)
+  @OneToMany(() => PostVote, (postVote) => postVote.post)
   votes?: PostVote[];
 
   @Field(() => Int)

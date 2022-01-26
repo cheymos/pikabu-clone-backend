@@ -26,7 +26,7 @@ export class PostCommentResolver {
   }
 
   @ResolveField(() => [CommentVote])
-  votes(@Parent() { id }: PostComment) {
+  votes(@Parent() { id }: PostComment): Promise<CommentVote[]> {
     return this.postCommentLoaders.batchVotes.load(id);
   }
 

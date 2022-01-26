@@ -6,8 +6,8 @@ import {
   UseInterceptors
 } from '@nestjs/common';
 import { AuthGuard } from '../../common/guards/auth.guard';
-import { LocalFile } from './local-file.entity';
-import { LocalFilesInterceptor } from './local-file.interceptor';
+import { LocalFile } from './entities/local-file.entity';
+import { LocalFilesInterceptor } from './interceptors/local-file.interceptor';
 import { LocalFileService } from './local-file.service';
 
 @Controller('files')

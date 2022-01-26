@@ -8,12 +8,12 @@ import { VoteService } from '../vote/vote.service';
 @Injectable({ scope: Scope.REQUEST })
 export class PostCommentLoaders {
   constructor(
-    private readonly postImageService: ImageService,
+    private readonly imageService: ImageService,
     private readonly voteService: VoteService,
   ) {}
 
   readonly batchImages = new DataLoader(async (postIds: number[]) => {
-    const images = await this.postImageService.getByPostCommentIds(postIds);
+    const images = await this.imageService.getByPostCommentIds(postIds);
 
     const commentIdToImages: { [key: string]: PostCommentImage[] } = {};
 

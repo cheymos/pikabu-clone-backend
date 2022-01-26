@@ -10,7 +10,7 @@ export class PostTagService {
     private readonly postTagRepository: Repository<PostTag>,
   ) {}
 
-  async addToPost(postId: number, tags: string[]) {
+  async addToPost(postId: number, tags: string[]): Promise<PostTag[]> {
     const newPostTags = [];
 
     for (let tag of tags) {

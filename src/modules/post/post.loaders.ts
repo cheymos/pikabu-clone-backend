@@ -17,7 +17,7 @@ export class PostLoaders {
   constructor(
     private readonly postImageService: ImageService,
     private readonly postTagService: PostTagService,
-    private readonly postVoteService: VoteService,
+    private readonly voteService: VoteService,
     private readonly postCommentService: PostCommentService,
   ) {}
 
@@ -54,7 +54,7 @@ export class PostLoaders {
   });
 
   readonly batchVotes = new DataLoader(async (voteIds: number[]) => {
-    const votes = await this.postVoteService.getByPostIds(voteIds);
+    const votes = await this.voteService.getByPostIds(voteIds);
 
     const postIdToVotes: { [key: string]: PostVote[] } = {};
 
@@ -71,7 +71,7 @@ export class PostLoaders {
 
   readonly batchComments = new DataLoader(
     async (params: LoaderArgs<CommentSort>[]) => {
-      const ids = params.map((param) => param.id)
+      const ids = params.map((param) => param.id);
       const paginationArgs = params[0].paginationOptions;
       const sortOption = params[0].sortOptions;
 

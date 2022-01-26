@@ -14,7 +14,7 @@ import { CreatePostCommentData } from './inputs/create-post-comment-data.input';
 export class PostCommentService {
   constructor(
     @InjectRepository(PostComment)
-    private readonly commentRepository: Repository<PostComment>,
+    private readonly postCommentRepository: Repository<PostComment>,
     private readonly imageService: ImageService,
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
@@ -30,13 +30,13 @@ export class PostCommentService {
 
     if (!post) return new NotFoundError(POST_NOT_FOUND);
 
-    const newComment = this.commentRepository.create({
+    const newComment = this.postCommentRepository.create({
       text,
       postId,
       ownerId: userId,
     });
 
-    const comment = await this.commentRepository.save(newComment);
+    const comment = await this.postCommentRepository.save(newComment);
 
     if (Array.isArray(imagePaths) && imagePaths.length) {
       comment.images = await this.imageService.addToComment(
@@ -58,7 +58,7 @@ export class PostCommentService {
     const skip = page * perPage - perPage;
     const fieldOrder = this.getFieldOrder(sortOption);
 
-    return this.commentRepository
+    return this.postCommentRepository
       .createQueryBuilder('comment')
       .where('comment.postId IN (:...ids)', { ids })
       .take(perPage)

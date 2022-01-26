@@ -27,13 +27,6 @@ export class VoteService {
     voteValue: VoteValue,
     userId: string,
   ): Promise<Post | AlreadyVotedError | NotFoundError> {
-    // 4 queries
-    // const post = await this.postRepository.findOne({
-    //   where: { id: postId },
-    //   relations: ['likes'],
-    // });
-
-    // 3 queries
     const post = await this.postRepository
       .createQueryBuilder('posts')
       .andWhereInIds(postId)
