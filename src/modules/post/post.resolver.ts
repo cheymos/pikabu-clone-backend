@@ -56,6 +56,13 @@ export class PostResolver {
     return this.postService.getAll(paginationArgs, sortOptions, filterOptions);
   }
 
+  @Query(() => [Post], { nullable: 'items' })
+  postSearch(
+    @Args('title', { type: () => String }) title: string,
+  ): Promise<Post[]> {
+    return this.postService.getManyByTitle(title);
+  }
+
   @ResolveField(() => [PostImage])
   async images(@Parent() { id, images }: Post): Promise<PostImage[]> {
     if (images) return images;

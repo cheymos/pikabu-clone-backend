@@ -29,6 +29,13 @@ export class PostService {
     return post;
   }
 
+  async getManyByTitle(title: string): Promise<Post[]> {
+    return this.postRepository
+      .createQueryBuilder('p')
+      .andWhere(`p.title LIKE :title`, { title: `%${title}%` })
+      .getMany();
+  }
+
   async create(
     { title, description, imagePaths, tags }: CreatePostData,
     userId: string,
