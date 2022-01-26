@@ -41,6 +41,10 @@ export class Post extends BaseEntity {
   @OneToMany(() => PostComment, (postComment) => postComment.post)
   comments?: PostComment[];
 
+  @Field(() => Int)
+  @Column({ default: 0 })
+  commentsCount: number;
+
   @Field()
   @Column()
   ownerId: string;
