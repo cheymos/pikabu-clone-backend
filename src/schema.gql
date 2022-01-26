@@ -97,6 +97,7 @@ type PaginationInfo {
 
 type Post {
   comments(CommentSort: [CommentSort!], page: Int = 1, perPage: Int = 20): [PostComment]!
+  commentsCount: Int!
   createdAt: DateTime!
   description: String!
   dislikes: Int!
@@ -153,10 +154,10 @@ type PostPagination {
 union PostResult = NotFoundError | Post
 
 enum PostSort {
-  DATE_ASC
-  DATE_DESC
-  LIKE_ASC
-  LIKE_DESC
+  createdAt_ASC
+  createdAt_DESC
+  likes_ASC
+  likes_DESC
 }
 
 type PostTag {

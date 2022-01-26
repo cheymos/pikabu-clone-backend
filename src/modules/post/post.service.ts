@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserInputError } from 'apollo-server-express';
-import { FindConditions, MoreThan, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { PaginationArgs } from '../../common/graphql/args/pagination.args';
 import { NotFoundError } from '../../common/graphql/errors/not-found.error';
 import { PaginationInfo } from '../../common/graphql/types/pagination-result.type';
@@ -49,23 +49,46 @@ export class PostService {
     return post;
   }
 
-  // MENTOR: Логику с пагинацией лучше вынести из сервиса?
+  // FIXME: Decompose this!
   async getAll(
     { page, perPage }: PaginationArgs,
-    sortOption?: PostSort[],
-    filterOptions?: PostFilter,
+    sortOptions?: PostSort[],
+    postFiler?: PostFilter,
   ): Promise<PostPagination> {
     if (page < 1 || perPage < 1)
       throw new UserInputError('Page and perPage must not be less than 1');
 
     const skip = page * perPage - perPage;
+    const queryBuilder = this.postRepository
+      .createQueryBuilder('p')
+      .skip(skip)
+      .take(perPage)
+      .innerJoinAndSelect('p.tags', 't');
 
-    const [items, totalItems] = await this.postRepository.findAndCount({
-      skip,
-      take: perPage,
-      order: this.getFieldOrder(sortOption),
-      where: this.getFilter(filterOptions),
-    });
+    if (sortOptions) {
+      sortOptions.forEach((sort) => {
+        const [field, order] = this.getOrderCondition(sort);
+        queryBuilder.addOrderBy(`p.${field}`, order);
+      });
+    }
+
+    if (postFiler && postFiler.tags) {
+      queryBuilder.andWhere('t.name IN (:...names)', { names: postFiler.tags });
+    }
+
+    if (postFiler && postFiler.group !== undefined) {
+      if (postFiler.group === PostGroup.BEST) {
+        queryBuilder.addOrderBy('p.likes');
+      } else if (postFiler.group === PostGroup.HOT) {
+        queryBuilder.addOrderBy('p.commentsCount', 'DESC');
+      } else if (postFiler.group === PostGroup.RECENT) {
+        queryBuilder.andWhere(
+          `p.createdAt > current_timestamp - interval '1 day'`,
+        );
+      }
+    }
+
+    const [items, totalItems] = await queryBuilder.getManyAndCount();
 
     const totalPages = Math.ceil(totalItems / perPage);
     const hasNextPage = page < totalPages;
@@ -84,49 +107,9 @@ export class PostService {
     return { items, pageInfo };
   }
 
-  // FIXME: Rewrite this
-  private getFilter(filterOptions?: PostFilter): FindConditions<Post> {
-    const conditions: FindConditions<Post> = {};
-
-    if (!filterOptions) return conditions;
-
-    const { group } = filterOptions;
-
-    if (group === PostGroup.RECENT) {
-      conditions.createdAt = MoreThan(this.getYesterdayDate());
-    }
-
-    return conditions;
-  }
-
-  private getFieldOrder(sortOptions?: PostSort[]) {
-    if (!Array.isArray(sortOptions) || !sortOptions.length) return undefined;
-
-    const order: PostOrderType = {};
-
-    for (const option of sortOptions) {
-      switch (option) {
-        case PostSort.DATE_ASC:
-          order.createdAt = 'ASC';
-          break;
-        case PostSort.DATE_DESC:
-          order.createdAt = 'DESC';
-          break;
-        case PostSort.LIKE_ASC:
-          order.likes = 'ASC';
-          break;
-        case PostSort.LIKE_DESC:
-          order.likes = 'DESC';
-          break;
-      }
-    }
-
-    return order;
-  }
-
-  private getYesterdayDate() {
-    return new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+  private getOrderCondition(sortOption: PostSort): OrderConditionType {
+    return PostSort[sortOption].toString().split('_') as OrderConditionType;
   }
 }
 
-export type PostOrderType = { [key in keyof Post]?: 'ASC' | 'DESC' | 1 | -1 };
+export type OrderConditionType = [field: string, order: 'ASC' | 'DESC'];
